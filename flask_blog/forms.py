@@ -25,3 +25,8 @@ class ShipperForm(FlaskForm):
 class DeleteShipperForm(FlaskForm):
     shipper_delete_id = IntegerField('Delete Shipper ID', validators=[DataRequired(), NumberRange(min=0, max=1000)], render_kw={"placeholder": "Shipper ID "})
     delete = SubmitField('Delete')
+
+    def validate_shipper_delete_id(self, shipper_delete_id):
+        shipper_delete_id = Shipper.query.filter_by(shipper_id=shipper_delete_id.data).first()
+        if not shipper_delete_id:
+            raise ValidationError('Please select an existing Shipper ID.')
