@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db
 from flask_blog.forms import ShippingForm
-from flask_blog.models import Shipping, Customer, Orders, Details, Products, Category, Shipper
+from flask_blog.models import Shipping, Customer, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping
 
 @app.route('/')
