@@ -44,12 +44,12 @@ class Orders(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
     shipper_id = db.Column(db.Integer, db.ForeignKey('shipper.shipper_id'), nullable=False)
 
-    order_details = db.relationship('Details', backref='has', lazy=True)
+    order_details = db.relationship('OrderDetails', backref='has', lazy=True)
     customer = db.relationship('Customer', backref='ordered', lazy=True)
     shipper = db.relationship('Shipper', backref='managed', lazy=True)
     
     def __repr__(self):
-        return f"Orders('order_id(PK): {self.order_id}, customer_id(FK): {self.customer_id}, shipper_id(FK):{self.shipper_id},  order_number: {self.order_number},)"
+        return f"Orders('order_id(PK): {self.order_id}, customer_id(FK): {self.customer_id}, shipper_id(FK):{self.shipper_id},  order_number: {self.order_number})"
 
 class OrderDetails(db.Model):
     order_details_id = db.Column(db.Integer, primary_key=True)
@@ -60,7 +60,7 @@ class OrderDetails(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
 
     order = db.relationship('Orders', backref='fromorder', lazy=True)
-    product = db.relationship('Products', backref='contains', lazy=True)
+    product = db.relationship('Products', backref='includes', lazy=True)
     
     def __repr__(self):
         return f"OrderDetails('order_details_id(PK): {self.order_details_id}, product_id(FK): {self.product_id}, order_id(FK): {self.order_id}, quantity: {self.quantity}, price: {self.price}, total: {self.total}')"

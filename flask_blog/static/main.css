@@ -1,7 +1,26 @@
 body {
   background: #fafafa;
   color: #333333;
-  /*margin-top: 5rem;*/
+}
+
+/*.delete_hide{
+    display:none
+}*/
+
+.submit-shipper {
+    margin-top: 12px;
+}
+.delete-shipper {
+    background-image: url(delete.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    height: 2px;
+    width: 2px;
+    border: none;
+}
+
+delete-shipper span {
+    display: none;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
