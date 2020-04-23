@@ -21,35 +21,37 @@ class Shipper(db.Model):
     def __repr__(self):
         return f"Shipper('shipper_id (PK): {self.shipper_id}, company_name: {self.company_name}, phone: {self.phone}')"
 
-class Customer(db.Model):
-    customer_id = db.Column(db.Integer, primary_key=True)
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
+    email = db.Column(db.String(40), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(50), nullable=False)
     city = db.Column(db.String(40), nullable=False)
     state = db.Column(db.String(40), nullable=False)
     postcode = db.Column(db.String(40), nullable=False)
     country = db.Column(db.String(40), nullable=False)
     phone = db.Column(db.String(40), nullable=False)
-    email = db.Column(db.String(40), nullable=False)
+    role = db.Column(db.Integer, nullable=False, default=0)
 
     orders = db.relationship('Orders', backref='buy', lazy=True)
 
     def __repr__(self):
-        return f"Customer('customer_id(PK): {self.customer_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}')"
+        return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}')"
 
 class Orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     order_number = db.Column(db.Integer, nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     shipper_id = db.Column(db.Integer, db.ForeignKey('shipper.shipper_id'), nullable=False)
 
     order_details = db.relationship('OrderDetails', backref='has', lazy=True)
-    customer = db.relationship('Customer', backref='ordered', lazy=True)
+    user = db.relationship('User', backref='ordered', lazy=True)
     shipper = db.relationship('Shipper', backref='managed', lazy=True)
     
     def __repr__(self):
-        return f"Orders('order_id(PK): {self.order_id}, customer_id(FK): {self.customer_id}, shipper_id(FK):{self.shipper_id},  order_number: {self.order_number})"
+        return f"Orders('order_id(PK): {self.order_id}, user_id(FK): {self.user_id}, shipper_id(FK):{self.shipper_id},  order_number: {self.order_number})"
 
 class OrderDetails(db.Model):
     order_details_id = db.Column(db.Integer, primary_key=True)
