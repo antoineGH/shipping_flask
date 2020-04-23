@@ -97,7 +97,6 @@
                                 <th scope="col">Shipper ID</th>
                                 <th scope="col">Company</th>
                                 <th scope="col">Phone</th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,11 +104,7 @@
                             <tr>
                                 <td>{{ elem.shipper_id }}</td>
                                 <td>{{ elem.company_name }}</td>
-                                <td>{{ elem.phone }}</td>
-                                <td>
-                                    <form method="POST" action="">
-                                    </form>
-                                </td>
+                                <td>{{ elem.phone }}</td>          
                             </tr>
                             {% endfor %}
                         </tbody>

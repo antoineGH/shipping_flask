@@ -1,4 +1,14 @@
-from flask_blog.models import Shipping
+from flask_blog.models import Shipping, Category
+
+# --- Category Choices
+ 
+def get_category_choice():
+    category_list = (Category.query.all())
+    category_choices = []
+    for i in range(len(category_list)):
+        tupple_id_name = (str(category_list[i].category_id), category_list[i].category_name) 
+        category_choices.append(tupple_id_name)
+    return category_choices
 
 # --- Shipping Functions 
 

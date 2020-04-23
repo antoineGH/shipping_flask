@@ -1,8 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm
 from flask_blog.models import Shipping, Customer, Orders, OrderDetails, Products, Category, Shipper
-from flask_blog.functions import compare_shipping
+from flask_blog.functions import compare_shipping, get_category_choice
 
 @app.route('/')
 @app.route('/home')
@@ -60,3 +60,26 @@ def category():
     
     return render_template('category.html', title='Categories', form_category=form_category, category=category, form_delete_category=form_delete_category)
 
+@app.route('/product', methods=['GET', 'POST'])
+def product():
+    product = Products.query.all()
+    category = Category.query.all()
+    form_product = ProductForm()
+    form_delete_product = DeleteProductForm()
+    
+
+    if form_product.validate_on_submit():
+        product = Products(product_name=form_product.product_name.data, product_description=form_product.product_description.data, unit_price=form_product.unit_price.data, category_id=form_product.category_id.data)
+        db.session.add(product)
+        db.session.commit()
+        flash(f'You have successfully created {product.product_name}', 'success')
+        return redirect(url_for('product'))
+
+    if form_delete_product.validate_on_submit(): 
+        todelete = Products.query.filter_by(product_id=form_delete_product.product_delete_id.data).first()
+        Products.query.filter_by(product_id=todelete.product_id).delete()   
+        db.session.commit()
+        flash(f'You have successfully delete {todelete.product_name}', 'success')
+        return redirect(url_for('product'))
+    
+    return render_template('product.html', title='Products', form_product=form_product, product=product, form_delete_product=form_delete_product, category=category)
