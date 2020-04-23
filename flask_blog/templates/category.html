@@ -1,0 +1,121 @@
+{% extends 'layout.html' %}
+{% block content %}
+<fieldset class="form-group">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="col-12">
+                    <form method="POST" action="">
+                        {{ form_category.hidden_tag() }}
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">
+                                <h5>Add Category Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <fieldset class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-12 col-md-5">
+                                            {{ form_category.category_name.label(class="form-control-label") }}
+                                            {% if form_category.category_name.errors %}
+                                            {{ form_category.category_name(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form_category.category_name.errors %}
+                                                <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form_category.category_name(class="form-control form-control-lg") }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            {{ form_category.category_description.label(class="form-control-label") }}
+                                            {% if form_category.category_description.errors %}
+                                            {{ form_category.category_description(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form_category.category_description.errors %}
+                                                <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form_category.category_description(class="form-control form-control-lg") }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12 col-md-2 mt-4">
+                                            {{ form_category.submit(class="btn btn-dark submit-shipper") }}
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <form method="POST" action="">
+                        {{ form_delete_category.hidden_tag() }}
+                        <div class="card bg-light mb-3 ">
+                            <div class="card-header">
+                                <h5>Delete Category Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <fieldset class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-12 col-md-7">
+                                            {{ form_delete_category.category_delete_id.label(class="form-control-label") }}
+                                            {% if form_category.category_name.errors %}
+                                            {{ form_delete_category.category_delete_id(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form_delete_category.category_delete_id.errors %}
+                                                <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form_delete_category.category_delete_id(class="form-control form-control-lg") }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12 col-md-2 mt-4">
+                                            {{ form_delete_category.delete(class="btn btn-dark submit-shipper") }}
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-12 col-md-6">
+            <div class="card bg-light mb-3">
+                <div class="card-header">
+                    <h5>Existing Categories</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Category ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for elem in category %}
+                            <tr>
+                                <td>{{ elem.category_id }}</td>
+                                <td>{{ elem.category_name }}</td>
+                                <td>{{ elem.category_description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}
