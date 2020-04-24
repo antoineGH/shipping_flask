@@ -32,6 +32,16 @@
                     <a class="nav-item nav-link" href="{{url_for('category')}}">Categories</a>
                     <a class="nav-item nav-link" href="{{url_for('product')}}">Products</a>
                 </div>
+                <div class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <span class="reminder mt-2">Connected as </span><a class="nav-item nav-link text-white" href="{{url_for('account')}}">{{ current_user.email }}</a>
+                    <a class="nav-item nav-link" href="{{url_for('account')}}">Account</a>
+                    <a class="nav-item nav-link" href="{{url_for('logout')}}">Logout</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>
+                    <a class="nav-item nav-link" href="{{url_for('register')}}">Register</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
