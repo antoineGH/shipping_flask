@@ -46,15 +46,24 @@ class User(db.Model, UserMixin):
     def get_id(self):
            return (self.user_id)
 
-    def is_admin(self):
+    def set_admin(self):
         user = User.query.filter_by(user_id=self.user_id).first()
         user.role = 1
         db.session.commit()
 
-    def is_user(self):
+    def set_user(self):
         user = User.query.filter_by(user_id=self.user_id).first()
         user.role = 0
         db.session.commit()
+
+    def get_role(self):
+        return self.role
+
+    def is_admin(self):
+        return True if self.role == 1 else False
+
+    def is_user(self):
+        return True if self.role == 0 else False
 
     def __repr__(self):
         return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}')"
