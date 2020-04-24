@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <form method="POST" action="">
-                        {{ form_product.hidden_tag() }}
+                        {{ form.hidden_tag() }}
                         <div class="card bg-light mb-3">
                             <div class="card-header">
                                 <h5>Add Product Information</h5>
@@ -15,62 +15,62 @@
                                 <fieldset class="form-group">
                                     <div class="form-row">
                                         <div class="col-12 col-md-6">
-                                            {{ form_product.product_name.label(class="form-control-label") }}
-                                            {% if form_product.product_name.errors %}
-                                            {{ form_product.product_name(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.product_name.label(class="form-control-label") }}
+                                            {% if form.product_name.errors %}
+                                            {{ form.product_name(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_product.product_name.errors %}
+                                                {% for error in form.product_name.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_product.product_name(class="form-control form-control-lg") }}
+                                            {{ form.product_name(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            {{ form_product.product_description.label(class="form-control-label") }}
-                                            {% if form_product.product_description.errors %}
-                                            {{ form_product.product_description(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.product_description.label(class="form-control-label") }}
+                                            {% if form.product_description.errors %}
+                                            {{ form.product_description(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_product.product_description.errors %}
+                                                {% for error in form.product_description.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_product.product_description(class="form-control form-control-lg") }}
+                                            {{ form.product_description(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-6">
-                                            {{ form_product.unit_price.label(class="form-control-label") }}
-                                            {% if form_product.unit_price.errors %}
-                                            {{ form_product.unit_price(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.unit_price.label(class="form-control-label") }}
+                                            {% if form.unit_price.errors %}
+                                            {{ form.unit_price(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_product.unit_price.errors %}
+                                                {% for error in form.unit_price.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_product.unit_price(class="form-control form-control-lg") }}
+                                            {{ form.unit_price(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            {{ form_product.category_id.label(class="form-control-label") }}
-                                            {% if form_product.category_id.errors %}
-                                            {{ form_product.category_id(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.category_id.label(class="form-control-label") }}
+                                            {% if form.category_id.errors %}
+                                            {{ form.category_id(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_product.category_id.errors %}
+                                                {% for error in form.category_id.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_product.category_id(class="form-control form-control-lg") }}
+                                            {{ form.category_id(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-12 mt-4">
-                                        {{ form_product.submit(class="btn btn-dark submit-product") }}
+                                        {{ form.submit(class="btn btn-dark submit-product") }}
                                     </div>
                                 </fieldset>
                             </div>
@@ -81,7 +81,7 @@
             <div class="row">
                 <div class="col-12">
                     <form method="POST" action="">
-                        {{ form_delete_product.hidden_tag() }}
+                        {{ form_delete.hidden_tag() }}
                         <div class="card bg-light mb-3 ">
                             <div class="card-header">
                                 <h5>Delete Product Information</h5>
@@ -90,20 +90,20 @@
                                 <fieldset class="form-group">
                                     <div class="form-row">
                                         <div class="col-12 col-md-7">
-                                            {{ form_delete_product.product_delete_id.label(class="form-control-label") }}
-                                            {% if form_delete_product.product_delete_id.errors %}
-                                            {{ form_delete_product.product_delete_id(class="form-control form-control-lg is-invalid") }}
+                                            {{ form_delete.product_delete_id.label(class="form-control-label") }}
+                                            {% if form_delete.product_delete_id.errors %}
+                                            {{ form_delete.product_delete_id(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_delete_product.product_delete_id.errors %}
+                                                {% for error in form_delete.product_delete_id.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_delete_product.product_delete_id(class="form-control form-control-lg") }}
+                                            {{ form_delete.product_delete_id(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-2 mt-4">
-                                            {{ form_delete_product.delete(class="btn btn-dark submit-shipper") }}
+                                            {{ form_delete.delete(class="btn btn-dark submit-shipper") }}
                                         </div>
                                     </div>
                                 </fieldset>

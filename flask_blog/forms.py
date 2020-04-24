@@ -77,6 +77,7 @@ class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder": "First Name"})
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder": "Last Name"})
     email = StringField('Email address', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    phone = StringField('Phone', validators=[DataRequired(), Length(min=2, max=15)], render_kw={"placeholder": "Phone"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Enter password"})
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')], render_kw={"placeholder": "Enter password"})
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=50)], render_kw={"placeholder": "Address"})
@@ -99,4 +100,5 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    remember = BooleanField('Remember Me')
     submit = SubmitField('Login')

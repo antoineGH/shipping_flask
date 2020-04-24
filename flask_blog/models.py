@@ -42,6 +42,9 @@ class User(db.Model, UserMixin):
 
     orders = db.relationship('Orders', backref='buy', lazy=True)
 
+    def get_id(self):
+           return (self.user_id)
+
     def __repr__(self):
         return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}')"
 

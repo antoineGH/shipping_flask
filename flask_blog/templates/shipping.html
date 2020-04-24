@@ -2,7 +2,7 @@
 {% block content %}
 <!-- Package Weight Module -->
 <form method="POST" action="">
-    {{ form_shipping.hidden_tag() }}
+    {{ form.hidden_tag() }}
     <fieldset class="form-group">
         <div class="row">
             <div class="col-12 col-md-8">
@@ -39,19 +39,19 @@
                     <div class="card-body">
                         <h6 class="card-title">
                             <div class="form-row">
-                                {{ form_shipping.weight.label(class="form-control-label") }}
-                                {% if form_shipping.weight.errors %}
-                                {{ form_shipping.weight(class="form-control form-control-lg is-invalid") }} 
+                                {{ form.weight.label(class="form-control-label") }}
+                                {% if form.weight.errors %}
+                                {{ form.weight(class="form-control form-control-lg is-invalid") }} 
                                 <div class="invalid-feedback">
-                                    {% for error in form_shipping.weight.errors %}
+                                    {% for error in form.weight.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form_shipping.weight(class="form-control form-control-lg") }}
+                                {{ form.weight(class="form-control form-control-lg") }}
                                 {% endif %}
                                 <div class="form-group mt-3">
-                                    {{ form_shipping.submit(class="btn btn-dark") }}
+                                    {{ form.submit(class="btn btn-dark") }}
                                 </div>
 </h6>
                         <div class="card-text">

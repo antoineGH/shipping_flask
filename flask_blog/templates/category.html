@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <form method="POST" action="">
-                        {{ form_category.hidden_tag() }}
+                        {{ form.hidden_tag() }}
                         <div class="card bg-light mb-3">
                             <div class="card-header">
                                 <h5>Add Category Information</h5>
@@ -15,33 +15,33 @@
                                 <fieldset class="form-group">
                                     <div class="form-row">
                                         <div class="col-12 col-md-5">
-                                            {{ form_category.category_name.label(class="form-control-label") }}
-                                            {% if form_category.category_name.errors %}
-                                            {{ form_category.category_name(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.category_name.label(class="form-control-label") }}
+                                            {% if form.category_name.errors %}
+                                            {{ form.category_name(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_category.category_name.errors %}
+                                                {% for error in form.category_name.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_category.category_name(class="form-control form-control-lg") }}
+                                            {{ form.category_name(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-5">
-                                            {{ form_category.category_description.label(class="form-control-label") }}
-                                            {% if form_category.category_description.errors %}
-                                            {{ form_category.category_description(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.category_description.label(class="form-control-label") }}
+                                            {% if form.category_description.errors %}
+                                            {{ form.category_description(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_category.category_description.errors %}
+                                                {% for error in form.category_description.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_category.category_description(class="form-control form-control-lg") }}
+                                            {{ form.category_description(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-2 mt-4">
-                                            {{ form_category.submit(class="btn btn-dark submit-shipper") }}
+                                            {{ form.submit(class="btn btn-dark submit-shipper") }}
                                         </div>
                                     </div>
                                 </fieldset>
@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-12">
                     <form method="POST" action="">
-                        {{ form_delete_category.hidden_tag() }}
+                        {{ form_delete.hidden_tag() }}
                         <div class="card bg-light mb-3 ">
                             <div class="card-header">
                                 <h5>Delete Category Information</h5>
@@ -62,20 +62,20 @@
                                 <fieldset class="form-group">
                                     <div class="form-row">
                                         <div class="col-12 col-md-7">
-                                            {{ form_delete_category.category_delete_id.label(class="form-control-label") }}
-                                            {% if form_category.category_name.errors %}
-                                            {{ form_delete_category.category_delete_id(class="form-control form-control-lg is-invalid") }}
+                                            {{ form_delete.category_delete_id.label(class="form-control-label") }}
+                                            {% if form.category_name.errors %}
+                                            {{ form_delete.category_delete_id(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_delete_category.category_delete_id.errors %}
+                                                {% for error in form_delete.category_delete_id.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_delete_category.category_delete_id(class="form-control form-control-lg") }}
+                                            {{ form_delete.category_delete_id(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-2 mt-4">
-                                            {{ form_delete_category.delete(class="btn btn-dark submit-shipper") }}
+                                            {{ form_delete.delete(class="btn btn-dark submit-shipper") }}
                                         </div>
                                     </div>
                                 </fieldset>

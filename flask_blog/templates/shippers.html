@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <form method="POST" action="">
-                        {{ form_shipper.hidden_tag() }}
+                        {{ form.hidden_tag() }}
                         <div class="card bg-light mb-3">
                             <div class="card-header">
                                 <h5>Add Shipper Information</h5>
@@ -15,33 +15,33 @@
                                 <fieldset class="form-group">
                                     <div class="form-row">
                                         <div class="col-12 col-md-5">
-                                            {{ form_shipper.company_name.label(class="form-control-label") }}
-                                            {% if form_shipper.company_name.errors %}
-                                            {{ form_shipper.company_name(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.company_name.label(class="form-control-label") }}
+                                            {% if form.company_name.errors %}
+                                            {{ form.company_name(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_shipper.company_name.errors %}
+                                                {% for error in form.company_name.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_shipper.company_name(class="form-control form-control-lg") }}
+                                            {{ form.company_name(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-5">
-                                            {{ form_shipper.phone.label(class="form-control-label") }}
-                                            {% if form_shipper.phone.errors %}
-                                            {{ form_shipper.phone(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.phone.label(class="form-control-label") }}
+                                            {% if form.phone.errors %}
+                                            {{ form.phone(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form_shipper.phone.errors %}
+                                                {% for error in form.phone.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                             {% else %}
-                                            {{ form_shipper.phone(class="form-control form-control-lg") }}
+                                            {{ form.phone(class="form-control form-control-lg") }}
                                             {% endif %}
                                         </div>
                                         <div class="col-12 col-md-2 mt-4">
-                                            {{ form_shipper.submit(class="btn btn-dark submit-shipper") }}
+                                            {{ form.submit(class="btn btn-dark submit-shipper") }}
                                         </div>
                                     </div>
                                 </fieldset>
@@ -53,7 +53,7 @@
                 <div class="row">
                     <div class="col-12">
                         <form method="POST" action="">
-                            {{ form_delete_shipper.hidden_tag() }}
+                            {{ form_delete.hidden_tag() }}
                             <div class="card bg-light mb-3 ">
                                 <div class="card-header">
                                     <h5>Delete Shipper Information</h5>
@@ -62,20 +62,20 @@
                                     <fieldset class="form-group">
                                         <div class="form-row">
                                             <div class="col-12 col-md-7">
-                                                {{ form_delete_shipper.shipper_delete_id.label(class="form-control-label") }}
-                                                {% if form_shipper.company_name.errors %}
-                                                {{ form_delete_shipper.shipper_delete_id(class="form-control form-control-lg is-invalid") }}
+                                                {{ form_delete.shipper_delete_id.label(class="form-control-label") }}
+                                                {% if form.company_name.errors %}
+                                                {{ form_delete.shipper_delete_id(class="form-control form-control-lg is-invalid") }}
                                                 <div class="invalid-feedback">
-                                                    {% for error in form_delete_shipper.shipper_delete_id.errors %}
+                                                    {% for error in form_delete.shipper_delete_id.errors %}
                                                     <span>{{ error }}</span>
                                                     {% endfor %}
                                                 </div>
                                                 {% else %}
-                                                {{ form_delete_shipper.shipper_delete_id(class="form-control form-control-lg") }}
+                                                {{ form_delete.shipper_delete_id(class="form-control form-control-lg") }}
                                                 {% endif %}
                                             </div>
                                             <div class="col-12 col-md-2 mt-4">
-                                                {{ form_delete_shipper.delete(class="btn btn-dark submit-shipper") }}
+                                                {{ form_delete.delete(class="btn btn-dark submit-shipper") }}
                                             </div>
                                         </div>
                                     </fieldset>

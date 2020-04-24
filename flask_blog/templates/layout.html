@@ -34,8 +34,7 @@
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                    <span class="reminder mt-2">Connected as </span><a class="nav-item nav-link text-white" href="{{url_for('account')}}">{{ current_user.email }}</a>
-                    <a class="nav-item nav-link" href="{{url_for('account')}}">Account</a>
+                    <span class="reminder mt-2"></span><a class="nav-item nav-link text-white" href="#">{{ current_user.email }}</a>
                     <a class="nav-item nav-link" href="{{url_for('logout')}}">Logout</a>
                     {% else %}
                     <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>
