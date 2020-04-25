@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='main.css') }}>
     <link rel="icon" href="{{ url_for('static', filename='ups_favicon.ico') }}" type="image/ico" sizes="16x16">
     {% if title %}
@@ -29,10 +28,18 @@
                     <a class="nav-item nav-link" href="{{url_for('home')}}">Home</a>
                     <a class="nav-item nav-link" href="{{url_for('shipping')}}">Shipping</a>
                     {% if current_user.is_authenticated %}
-                    <a class="nav-item nav-link" href="{{url_for('shippers')}}">Shippers</a>
-                    <a class="nav-item nav-link" href="{{url_for('category')}}">Categories</a>
-                    <a class="nav-item nav-link" href="{{url_for('product')}}">Products</a>
-                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Manage
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{url_for('shippers')}}">Shippers</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{url_for('category')}}">Categories</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{url_for('product')}}">Products</a>
+                        </div>
+                        {% endif %}
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
@@ -46,7 +53,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Jumbotron -->
     <div class="jumbotron jumbotron-fluid" style="background:url({{url_for('static', filename="ubuntu_bg.jpg")}}) no-repeat; background-size: cover;">
         <div class="text-white text-center bg-transparent my-5">
@@ -73,7 +79,6 @@
             <div class="col-12 col-md-12">
                 <!-- Content Templates -->
                 {% block content %}{% endblock %}
-
             </div>
         </div>
     </div>
