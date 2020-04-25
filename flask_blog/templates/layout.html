@@ -28,9 +28,11 @@
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{{url_for('home')}}">Home</a>
                     <a class="nav-item nav-link" href="{{url_for('shipping')}}">Shipping</a>
+                    {% if current_user.is_authenticated %}
                     <a class="nav-item nav-link" href="{{url_for('shippers')}}">Shippers</a>
                     <a class="nav-item nav-link" href="{{url_for('category')}}">Categories</a>
                     <a class="nav-item nav-link" href="{{url_for('product')}}">Products</a>
+                    {% endif %}
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}

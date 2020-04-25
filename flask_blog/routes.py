@@ -62,7 +62,6 @@ def category():
     return render_template('category.html', title='Categories', form=form, form_delete=form_delete, category=category)
 
 @app.route('/product', methods=['GET', 'POST'])
-@login_required
 def product():
     product = Products.query.all()
     category = Category.query.all()
