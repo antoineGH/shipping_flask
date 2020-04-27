@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, FloatField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_blog.models import Shipper, Category, Products, User
-from flask_blog.functions import get_category_choice
+from flask_blog.functions import get_category_choice, get_country
+import pycountry
 
 class ShippingForm(FlaskForm):
     weight = FloatField('Package Weight', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Enter package weight"})
@@ -84,7 +85,9 @@ class RegistrationForm(FlaskForm):
     city = StringField('City', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "City"})
     postcode = IntegerField('Postcode', validators=[DataRequired(), NumberRange(min=0, max=100000)], render_kw={"placeholder": "Postcode"})
     state = StringField('State', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "State"})
-    country = StringField('Country', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "Country"})
+    #country = StringField('Country', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "Country"})
+    country_choice = get_country()
+    country = SelectField(label = 'Country', choices=country_choice, validators=[DataRequired()], render_kw={"placeholder": "Country"})
     submit = SubmitField('Register')
 
     def validate_username(self, username):

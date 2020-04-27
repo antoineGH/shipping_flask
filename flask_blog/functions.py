@@ -1,4 +1,13 @@
 from flask_blog.models import Shipping, Category
+import pycountry
+
+# Coutries Selection
+def get_country():
+    country_choices=[]
+    for country in list(pycountry.countries):
+        tupple_country = (country.alpha_2, country.name)
+        country_choices.append(tupple_country)
+    return country_choices
 
 # --- Category Choices
  
