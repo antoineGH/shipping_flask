@@ -1,4 +1,6 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
+from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, FloatField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_blog.models import Shipper, Category, Products, User
@@ -105,3 +107,16 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class UpdateAccountForm(FlaskForm):
+    first_name = StringField('Change First Name', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "First Name"})
+    last_name = StringField('Change Last Name', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "Last Name"})
+    email = StringField('Change Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    picture = FileField('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Update')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            email = User.query.filter_by(email=email.data).first()
+            if email:
+                raise ValidationError('That email is taken. Please choose a different one.')

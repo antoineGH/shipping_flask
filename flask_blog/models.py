@@ -40,6 +40,7 @@ class User(db.Model, UserMixin):
     country = db.Column(db.String(40), nullable=False)
     phone = db.Column(db.String(40), nullable=False)
     role = db.Column(db.Integer, nullable=False, default=0)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
 
     orders = db.relationship('Orders', backref='buy', lazy=True)
 
@@ -66,7 +67,7 @@ class User(db.Model, UserMixin):
         return True if self.role == 0 else False
 
     def __repr__(self):
-        return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}')"
+        return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}, image: {self.image_file}')"
 
 class Orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)

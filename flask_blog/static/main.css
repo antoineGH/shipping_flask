@@ -3,6 +3,10 @@ body {
   color: #333333;
 }
 
+.info_recap {
+    text-align: left !important;
+}
+
 .submit-login {
     margin-top: 35px;
 }
@@ -127,10 +131,10 @@ a.article-title:hover {
 }
 
 .account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
+    height: 90px;
+    width: 90px;
+    margin-right: 20px;
+    margin-bottom: 16px;
 }
 
 .account-heading {

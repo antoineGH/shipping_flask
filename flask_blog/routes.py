@@ -1,6 +1,9 @@
+import os
+import secrets
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping, get_category_choice
 from flask_login import login_user, current_user, logout_user, login_required
@@ -36,7 +39,7 @@ def shippers():
         db.session.commit()
         flash(f'You have successfully delete {todelete.company_name}', 'success')
         return redirect(url_for('shippers'))
-    
+
     return render_template('shippers.html', title='Shippers', form=form, form_delete=form_delete, shipper=shipper)
 
 @app.route('/category', methods=['GET', 'POST'])
@@ -68,7 +71,6 @@ def product():
     form = ProductForm()
     form_delete = DeleteProductForm()
     
-
     if form.validate_on_submit():
         product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data)
         db.session.add(product)
@@ -99,6 +101,41 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', title='Register', form=form)
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+    output_size = (90, 90)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+@app.route('/account', methods=['GET','POST'])
+@login_required
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.first_name = form.first_name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('You account has been updated!', 'success')
+        return redirect(url_for('account'))
+
+    elif request.method == 'GET':
+        form.first_name.data = current_user.first_name.title()
+        form.last_name.data = current_user.last_name.title()
+        form.email.data = current_user.email
+
+    image_file = url_for('static', filename='profile_pics/' +  current_user.image_file)
+    return render_template('account.html', title="Account", image_file=image_file, form=form)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
