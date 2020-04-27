@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
-from flask_blog.functions import compare_shipping, get_category_choice
+from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
@@ -21,6 +21,7 @@ def shipping():
     return render_template('shipping.html', title='Shipping', form=form, shipping=shipping, shipping_prices=shipping_prices)
 
 @app.route('/shippers', methods=['GET', 'POST'])
+@login_required
 def shippers():
     shipper = Shipper.query.all()
     form = ShipperForm()
@@ -43,6 +44,7 @@ def shippers():
     return render_template('shippers.html', title='Shippers', form=form, form_delete=form_delete, shipper=shipper)
 
 @app.route('/category', methods=['GET', 'POST'])
+@login_required
 def category():
     category = Category.query.all()
     form = CategoryForm()
@@ -65,6 +67,7 @@ def category():
     return render_template('category.html', title='Categories', form=form, form_delete=form_delete, category=category)
 
 @app.route('/product', methods=['GET', 'POST'])
+@login_required
 def product():
     product = Products.query.all()
     category = Category.query.all()
@@ -72,7 +75,12 @@ def product():
     form_delete = DeleteProductForm()
     
     if form.validate_on_submit():
-        product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data)
+        if form.picture.data:
+            picture_file = save_picture_product(form.picture.data)     
+            product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data, image_product=picture_file)
+        else:
+            product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data)
+        
         db.session.add(product)
         db.session.commit()
         flash(f'You have successfully created {product.product_name}', 'success')
@@ -85,6 +93,7 @@ def product():
         flash(f'You have successfully delete {todelete.product_name}', 'success')
         return redirect(url_for('product'))
     
+    #image_file = url_for('static', filename='products_pics/' +  current_user.image_file)
     return render_template('product.html', title='Products', form=form, product=product, form_delete=form_delete, category=category)
 
 @app.route('/register', methods=['GET','POST'])
@@ -102,18 +111,20 @@ def register():
 
     return render_template('register.html', title='Register', form=form)
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
-    output_size = (90, 90)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/account', methods=['GET','POST'])
 @login_required
@@ -137,20 +148,11 @@ def account():
     image_file = url_for('static', filename='profile_pics/' +  current_user.image_file)
     return render_template('account.html', title="Account", image_file=image_file, form=form)
 
-@app.route('/login', methods=['GET','POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+@app.route('/shop', methods=['GET','POST'])
+def shop():
+    products = Products.query.all()    
+
+    return render_template('shop.html', title='Shop', products=products)
 
 @app.route('/logout')
 def logout():

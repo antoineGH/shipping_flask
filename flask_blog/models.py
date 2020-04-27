@@ -96,16 +96,6 @@ class OrderDetails(db.Model):
     def __repr__(self):
         return f"OrderDetails('order_details_id(PK): {self.order_details_id}, product_id(FK): {self.product_id}, order_id(FK): {self.order_id}, quantity: {self.quantity}, price: {self.price}, total: {self.total}')"
 
-class Products(db.Model):
-    product_id = db.Column(db.Integer, primary_key=True)
-    product_name = db.Column(db.String(40), nullable=False)
-    product_description = db.Column(db.String(100), nullable=False)
-    unit_price = db.Column(db.Float, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
-    
-    def __repr__(self):
-        return f"Products('product_id(PK): {self.product_id}, category_id(FK): {self.category_id}, product_name: {self.product_name}, product_description: {self.product_description}, unit_price: {self.unit_price}')"
-
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(40), nullable=False)
@@ -115,3 +105,16 @@ class Category(db.Model):
     
     def __repr__(self):
         return f"Category('category_id(PK): {self.category_id}, category_name: {self.category_name}, category_description: {self.category_description}')"
+
+class Products(db.Model):
+    product_id = db.Column(db.Integer, primary_key=True)
+    product_name = db.Column(db.String(40), nullable=False)
+    product_description = db.Column(db.String(100), nullable=False)
+    unit_price = db.Column(db.Float, nullable=False)
+    image_product = db.Column(db.String(20), nullable=False, default='default.jpg')
+    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
+
+    category = db.relationship('Category', backref='is', lazy=True)
+    
+    def __repr__(self):
+        return f"Products('product_id(PK): {self.product_id}, category_id(FK): {self.category_id}, product_name: {self.product_name}, product_description: {self.product_description}, unit_price: {self.unit_price}')"

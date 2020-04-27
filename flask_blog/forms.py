@@ -60,6 +60,7 @@ class ProductForm(FlaskForm):
     unit_price = FloatField('Unit Price', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Enter Unit Price"})
     category_choice = get_category_choice()
     category_id = SelectField(label='Category', choices=category_choice)
+    picture = FileField('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Add')
 
     def validate_product_name(self, product_name):
