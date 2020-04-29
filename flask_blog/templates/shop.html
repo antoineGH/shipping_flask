@@ -10,7 +10,7 @@
     {% for product in products %}
     <div class="col-10 col-md-3">
         <div class="card mb-4">
-            <div class="card-header text-secondary">Category / {{ product.category.category_name }}</div>
+            <div class="card-header text-white-50"><i class="fas fa-columns fa-sm mr-1"></i> Category / {{ product.category.category_name}}</div>
             <a href="#"><img class="card-img-top product-img mt-3"  src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
             <div class="card-body">
                 <h5 class="card-title">{{ product.product_name }}</h5>

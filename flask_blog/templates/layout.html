@@ -26,29 +26,29 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{{url_for('shop')}}">Shop</a>
-                    <a class="nav-item nav-link" href="{{url_for('shipping')}}">Shipping</a>
+                    <a class="nav-item nav-link" href="{{url_for('shop')}}"><i class="fas fa-truck fa-sm"></i> Shop</a>
+                    <a class="nav-item nav-link ml-2" href="{{url_for('shipping')}}"><i class="fas fa-shopping-bag fa-sm"></i> Shipping</a>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Manage
+                            <i class="fas fa-tasks ml-2"></i> Manage
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{url_for('shippers')}}">Shippers</a>
+                            <a class="dropdown-item" href="{{url_for('shippers')}}"><i class="fas fa-plane-departure fa-sm mr-1"></i> Shippers</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{url_for('category')}}">Categories</a>
+                            <a class="dropdown-item" href="{{url_for('category')}}"><i class="fas fa-columns fa-sm mr-1"></i> Categories</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{url_for('product')}}">Products</a>
+                            <a class="dropdown-item" href="{{url_for('product')}}"><i class="fas fa-cube fa-sm mr-1"></i> Products</a>
                         </div>
                         {% endif %}
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                    <span class="reminder mt-2"></span><a class="nav-item nav-link text-white" href="{{ url_for('account') }}">{{ current_user.email }}</a>
-                    <a class="nav-item nav-link" href="{{url_for('logout')}}">Logout</a>
+                    <span class="reminder mt-2"></span><a class="nav-item nav-link" href="{{ url_for('account') }}"><i class="fas fa-user-cog fa-sm"></i> {{ current_user.email }}</a>
+                    <a class="nav-item nav-link" href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt fa-sm"></i> Logout</a>
                     {% else %}
-                    <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>
-                    <a class="nav-item nav-link" href="{{url_for('register')}}">Register</a>
+                    <a class="nav-item nav-link" href="{{url_for('login')}}"><i class="fas fa-sign-in-alt fa-sm"></i> Login</a>
+                    <a class="nav-item nav-link ml-2" href="{{url_for('register')}}"><i class="fas fa-user-plus fa-sm"></i> Register</a>
                     {% endif %}
                 </div>
             </div>
