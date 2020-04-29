@@ -14,8 +14,8 @@
             <a href="#"><img class="card-img-top product-img mt-3"  src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
             <div class="card-body">
                 <h5 class="card-title">{{ product.product_name }}</h5>
-                <p class="card-text">{{ product.unit_price }}$</p>
-                <a href="#" class="btn btn-dark">Buy Product</a>
+                <p class="card-text price_tag font-weight-bold">{{ product.unit_price }}$</p>
+                <a href="#" class="btn btn-dark"><i class="fas fa-shopping-cart fa-xs"></i> Add to cart</a>
             </div>
         </div>
     </div>

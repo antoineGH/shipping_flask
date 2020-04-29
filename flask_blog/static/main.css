@@ -3,6 +3,18 @@ body {
   color: #333333;
 }
 
+.footer_language {
+    padding: 6px 6px 6px 8px;
+    color: white;
+    border: 1px solid #848688;
+    border-radius: 3px;
+}
+
+.price_tag {
+    color: #B12704;
+    font-size: 17px;
+}
+
 .product-img {
     width: 100%;
     height: 10vw;
@@ -56,12 +68,26 @@ delete-shipper span {
     color: white;
 }
 
-.navbar-logo{
-    opacity: 0.7;
+.navbar-brand{
+    max-width:90px;
+}
+
+.navbar-logo {
+    width: 80%;
 }
 
 .card-img-bottom {
-    width: 30%;
+    width: 20%;
+    margin-bottom:10px;
+}
+
+@media (min-width:500px) {
+
+    .card-img-bottom {
+        width: 45%;
+        margin-bottom: 1px;
+        margin-top:10px
+    }
 }
 
 .display-4 {

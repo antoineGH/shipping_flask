@@ -8,11 +8,6 @@ from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Ca
 from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product
 from flask_login import login_user, current_user, logout_user, login_required
 
-@app.route('/')
-@app.route('/home')
-def home():
-    return render_template('home.html', title='Home')
-
 @app.route('/shipping', methods=['GET','POST'])
 def shipping():
     shipping_prices = Shipping.query.all()
@@ -148,6 +143,7 @@ def account():
     image_file = url_for('static', filename='profile_pics/' +  current_user.image_file)
     return render_template('account.html', title="Account", image_file=image_file, form=form)
 
+@app.route('/')
 @app.route('/shop', methods=['GET','POST'])
 def shop():
     products = Products.query.all()    
