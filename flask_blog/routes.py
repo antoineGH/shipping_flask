@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product
 from flask_login import login_user, current_user, logout_user, login_required
@@ -94,7 +94,7 @@ def product():
 @app.route('/register', methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('shop'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -109,14 +109,14 @@ def register():
 @app.route('/login', methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('shop'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            return redirect(next_page) if next_page else redirect(url_for('shop'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -125,11 +125,13 @@ def login():
 @login_required
 def account():
     form = UpdateAccountForm()
+    form_delete = DeleteAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
         current_user.email = form.email.data
         db.session.commit()
         flash('You account has been updated!', 'success')
@@ -140,8 +142,14 @@ def account():
         form.last_name.data = current_user.last_name.title()
         form.email.data = current_user.email
 
+    if form_delete.validate_on_submit():
+        User.query.filter_by(email=current_user.email).delete()
+        db.session.commit()
+        flash('You account has been deleted!', 'success')
+        return redirect(url_for('logout'))
+
     image_file = url_for('static', filename='profile_pics/' +  current_user.image_file)
-    return render_template('account.html', title="Account", image_file=image_file, form=form)
+    return render_template('account.html', title="Account", image_file=image_file, form=form, form_delete=form_delete)
 
 @app.route('/')
 @app.route('/shop', methods=['GET','POST'])
@@ -153,4 +161,4 @@ def shop():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for(('home')))
+    return redirect(url_for(('shop')))

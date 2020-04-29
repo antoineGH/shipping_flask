@@ -143,6 +143,19 @@ a.article-title:hover {
   white-space: pre-line;
 }
 
+.carousel {
+    background: #007aeb;
+}
+
+.carousel-item .img-fluid {
+    width: 100%;
+}
+
+.carousel-item a {
+    display: block;
+    width: 100%;
+}
+
 .article-img {
   height: 65px;
   width: 65px;
@@ -167,8 +180,6 @@ a.article-title:hover {
 }
 
 .account-img {
-    height: 90px;
-    width: 90px;
     margin-right: 20px;
     margin-bottom: 16px;
 }
