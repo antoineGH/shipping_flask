@@ -8,7 +8,7 @@ from flask_blog.functions import get_category_choice, get_country
 import pycountry
 
 class ShippingForm(FlaskForm):
-    weight = FloatField('Package Weight', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Enter package weight"})
+    weight = FloatField(validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Enter package weight"})
     submit = SubmitField('Calculate')
 
 class ShipperForm(FlaskForm):
@@ -81,6 +81,7 @@ class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder": "First Name"})
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder": "Last Name"})
     email = StringField('Email address', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    email = StringField('Email address', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
     phone = StringField('Phone', validators=[DataRequired(), Length(min=2, max=15)], render_kw={"placeholder": "Phone"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Enter password"})
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')], render_kw={"placeholder": "Enter password"})
@@ -88,7 +89,6 @@ class RegistrationForm(FlaskForm):
     city = StringField('City', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "City"})
     postcode = IntegerField('Postcode', validators=[DataRequired(), NumberRange(min=0, max=100000)], render_kw={"placeholder": "Postcode"})
     state = StringField('State', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "State"})
-    #country = StringField('Country', validators=[DataRequired(), Length(min=3, max=20)], render_kw={"placeholder": "Country"})
     country_choice = get_country()
     country = SelectField(label = 'Country', choices=country_choice, validators=[DataRequired()], render_kw={"placeholder": "Country"})
     submit = SubmitField('Register')
@@ -124,3 +124,8 @@ class UpdateAccountForm(FlaskForm):
 
 class DeleteAccountForm(FlaskForm):
     delete = SubmitField('Delete')
+
+class AddOrderForm(FlaskForm):
+    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0, max=10)], render_kw={"placeholder": "1"})
+    product_id = HiddenField('Product_ID')
+    submit = SubmitField('Add to cart')

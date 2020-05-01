@@ -1,21 +1,35 @@
 {% extends 'layout.html' %}
 {% block content %}
-
-<div class="row" id="line1">
-    <div class="col">
-        <h5 class="text-center my-4 top-product-title">Our Products</h5>
-    </div>
-</div>
 <div class="row justify-content-center mb-3">
     {% for product in products %}
     <div class="col-10 col-md-3">
         <div class="card mb-4">
-            <div class="card-header text-white-50"><i class="fas fa-columns fa-sm mr-1"></i> Category / {{ product.category.category_name}}</div>
-            <a href="#"><img class="card-img-top product-img mt-3"  src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
+            <div class="card-header text-white-50">Category / {{ product.category.category_name}}</div>
+            <a href="#"><img class="card-img-top product-img mt-3" src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
             <div class="card-body">
                 <h5 class="card-title">{{ product.product_name }}</h5>
                 <p class="card-text price_tag font-weight-bold">{{ product.unit_price }}$</p>
-                <a href="#" class="btn btn-dark"><i class="fas fa-shopping-cart fa-xs"></i> Add to cart</a>
+                <form method="POST" action="">
+                    {{ form.csrf_token() }}
+                    {{ form.product_id(value=product.product_id) }}
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            {% if form.quantity.errors %}
+                            {{ form.quantity(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.quantity(class="form-control form-control-lg quantity_field") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
+                            <button type=submit class="btn btn-md btn-dark buy_button"><i class="fas fa-shopping-cart fa-xs"></i> Buy</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

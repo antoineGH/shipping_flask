@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product
 from flask_login import login_user, current_user, logout_user, login_required
@@ -155,8 +155,17 @@ def account():
 @app.route('/shop', methods=['GET','POST'])
 def shop():
     products = Products.query.all()    
+    form = AddOrderForm()
 
-    return render_template('shop.html', title='Shop', products=products)
+    if form.validate_on_submit():
+
+        flash('Quantity: {}, Current User ID: {}, Product ID : {}'.format(form.quantity.data, current_user.user_id, form.product_id.data), 'success')
+        return redirect(url_for('shop'))
+    
+    elif request.method == 'GET':
+        form.quantity.data = 1
+
+    return render_template('shop.html', title='Shop', products=products, form=form)
 
 @app.route('/logout')
 def logout():
