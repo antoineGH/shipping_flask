@@ -1,9 +1,25 @@
 import os
 import secrets
 from PIL import Image
+import random
 from flask_blog import app
-from flask_blog.models import Shipping, Category
+from flask_blog.models import Shipping, Category, Shipper
 import pycountry
+
+# --- Calculate Total Cart
+
+def calc_total_cart(orderdetails):
+    for prod in orderdetails.product:
+        print(prod)
+        print(type(prod))
+        print(prod.product_name)
+
+
+# --- Order Details Number
+
+def gen_order_number():
+    order_number = 'ON_' + (random.choice('abcdefghij')).capitalize()  + (random.choice('abcdefghij')).capitalize()  + str(random.randrange(1000, 9999))
+    return order_number 
 
 # --- Save Pictures
 
@@ -50,6 +66,16 @@ def get_category_choice():
         tupple_id_name = (str(category_list[i].category_id), category_list[i].category_name) 
         category_choices.append(tupple_id_name)
     return category_choices
+
+# --- Shipper Choices
+
+def get_shipper_choice():
+    shipper_list = (Shipper.query.all())
+    shipper_choices = []
+    for i in range(len(shipper_list)):
+        tupple_id_name = (str(shipper_list[i].shipper_id), shipper_list[i].company_name)
+        shipper_choices.append(tupple_id_name)
+    return shipper_choices
 
 # --- Shipping Functions 
 

@@ -3,9 +3,9 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
-from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product
+from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/shipping', methods=['GET','POST'])
@@ -154,18 +154,49 @@ def account():
 @app.route('/')
 @app.route('/shop', methods=['GET','POST'])
 def shop():
-    products = Products.query.all()    
+    products = Products.query.all()  
     form = AddOrderForm()
 
-    if form.validate_on_submit():
+    if form.validate_on_submit() and current_user.is_authenticated:
+        product = Products.query.filter_by(product_id=form.product_id.data).first()
+        price = product.unit_price
+        product_id = product.product_id
+        quantity = form.quantity.data
+        user_id = current_user.user_id
+        total = float(quantity * price)
+        
+        orderdetails = OrderDetails.query.filter_by(product_id=product_id).first()
+        if orderdetails:
+            orderdetails.quantity += form.quantity.data
+            orderdetails.total += (form.quantity.data * orderdetails.price)
+        else:
+            orderdetails = OrderDetails(quantity=quantity, price=price, total=total, user_id=user_id ,product_id=product_id)
 
-        flash('Quantity: {}, Current User ID: {}, Product ID : {}'.format(form.quantity.data, current_user.user_id, form.product_id.data), 'success')
+        db.session.add(orderdetails)
+        db.session.commit()
+        flash('Successfully added {} to your cart.'.format(product.product_name), 'success')
         return redirect(url_for('shop'))
     
+    elif form.validate_on_submit():
+        flash('Please Log In to Add to Cart.', 'warning')
+        return redirect(url_for('login'))
+       
     elif request.method == 'GET':
         form.quantity.data = 1
 
-    return render_template('shop.html', title='Shop', products=products, form=form)
+    return render_template('shop.html', title='Shop', products=products, form=form, )
+
+@app.route('/cart', methods=['GET','POST'])
+def cart():
+    form = CreateOrderForm()
+    orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
+    order_details = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
+
+    total_user = 0
+    for order in orderuser:
+        total_user += order.total
+
+    return render_template('cart.html', title='Cart', form=form, order_details=order_details, total_user=total_user)
 
 @app.route('/logout')
 def logout():

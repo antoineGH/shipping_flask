@@ -4,7 +4,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, FloatField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_blog.models import Shipper, Category, Products, User
-from flask_blog.functions import get_category_choice, get_country
+from flask_blog.functions import get_category_choice, get_country, get_shipper_choice
 import pycountry
 
 class ShippingForm(FlaskForm):
@@ -129,3 +129,8 @@ class AddOrderForm(FlaskForm):
     quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0, max=10)], render_kw={"placeholder": "1"})
     product_id = HiddenField('Product_ID')
     submit = SubmitField('Add to cart')
+
+class CreateOrderForm(FlaskForm):
+    shipper_choice = get_shipper_choice()
+    shipper_id = SelectField(label='Select Shipper', choices=shipper_choice)
+    submit = SubmitField('Order')

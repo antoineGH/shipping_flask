@@ -87,7 +87,8 @@ class OrderDetails(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     price = db.Column(db.Float, nullable=False)  
     total = db.Column(db.Float, nullable=False)
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
 
     order = db.relationship('Orders', backref='fromorder', lazy=True)
