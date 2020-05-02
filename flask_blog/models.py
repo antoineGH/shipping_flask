@@ -87,7 +87,7 @@ class OrderDetails(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     price = db.Column(db.Float, nullable=False)  
     total = db.Column(db.Float, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=True)
     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
 

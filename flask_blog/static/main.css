@@ -16,6 +16,7 @@ body {
 }*/
 .form-control-choice {
     height: calc(2.575rem + 2px);
+    width: 120%;
 }
 
 .card-header {
