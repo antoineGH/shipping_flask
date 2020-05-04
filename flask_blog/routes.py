@@ -7,6 +7,7 @@ from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, Categ
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import and_
 
 @app.route('/shipping', methods=['GET','POST'])
 def shipping():
@@ -166,12 +167,13 @@ def shop():
             user_id = current_user.user_id
             total = float(quantity * price)
         
-            orderdetails = OrderDetails.query.filter_by(product_id=product_id).first()
+            orderdetails = OrderDetails.query.filter(and_(OrderDetails.product_id == form.product_id.data, OrderDetails.order_id == 0)).first()
+                 
             if orderdetails:
                 orderdetails.quantity += form.quantity.data
                 orderdetails.total += (form.quantity.data * orderdetails.price)
             else:
-                orderdetails = OrderDetails(quantity=quantity, price=price, total=total, user_id=user_id ,product_id=product_id)
+                orderdetails = OrderDetails(quantity=quantity, price=price, total=total, user_id=user_id , order_id = 0, product_id=product_id)
 
             db.session.add(orderdetails)
             db.session.commit()
@@ -193,6 +195,10 @@ def cart():
     orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
     order_details = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
 
+    for order_detail in order_details:
+        if order_detail.order_id:
+            print("Already Bought ")
+
     total_user = 0
     for order in orderuser:
         total_user += order.total
@@ -205,10 +211,10 @@ def cart():
 
             for order_detail in order_details:
                 order_detail.order_id = order.order_id
+                #Correct !!!
                 order_detail.user_id = 99
             db.session.commit()
-            flash('Thank you for your order.', 'success')
-            return redirect(url_for('shop'))
+            return redirect(url_for('confirm'))
 
         elif form.validate_on_submit():
             flash('Please Log In to Add to Cart.', 'warning')
@@ -220,3 +226,23 @@ def cart():
 def logout():
     logout_user()
     return redirect(url_for(('shop')))
+
+@app.route('/confirm')
+@login_required
+def confirm():
+    order_user = Orders.query.filter_by(user_id=current_user.user_id).all()
+
+    order_total = {}
+    for order in order_user:
+        order_details = OrderDetails.query.filter_by(order_id=order.order_id).all()
+        total = 0
+        for order_detail in order_details:      
+            total= sum([order_detail.total], start=total)
+        order_total[order.order_id] = total
+
+    order_details = {}
+    for order in order_user:
+        order_detail_id = OrderDetails.query.filter_by(order_id=order.order_id).all()
+        order_details[order.order_id] = order_detail_id
+        
+    return render_template('confirm.html', title='Order', order_user=order_user, order_details=order_details, order_total=order_total)

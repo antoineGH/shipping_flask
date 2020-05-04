@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="row mb-3">
+        {% if order_user %}
+        <div class="col-12 col-md-12">
+            <h5>Order Informations</h5>
+        </div>
+        {% for order in order_user %}
+        <div class="col-10 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <p>Invoice {{ order.order_number }}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Order Number: {{ order.order_number }}</h5>
+                    <p class="card-text text-left font-weight-bold">Transporter :</p>
+                    <p class="card-text text-left"><span>{{ order.shipper.company_name }}</span> (<a href="tel:{{ order.shipper.phone}}">Contact: {{ order.shipper.phone}}</a>)</p>
+                    <br />
+                    <p class="card-text text-left font-weight-bold">Bill To: </p>
+                    <p class="card-text text-left"><span>{{ order.user.first_name }} {{ order.user.last_name }}</span></p>
+                    <p class="card-text text-left"><span>{{ order.user.phone }}</span></p>
+                    <p class="card-text text-left"><span>{{ order.user.email }}</span></p>
+                    <p class="card-text text-left"><span>{{ order.user.address }}, {{ order.user.city }}, {{ order.user.postcode }}, {{ order.user.state }}. {{ order.user.country }}</span></p>
+                    <br />
+                    <p class="card-text text-left font-weight-bold">Order Details :</p>
+                    {% for order_detail in order_details[order.order_id] %}
+                    <div class="row">
+                        <div class="col-3">
+                            <p class="card-text text-left">{{ order_detail.product.product_name }}</p>
+                        </div>
+                        <div class="col-3">
+                            <p class="card-text text-center">{{ order_detail.price }}$</p>
+                        </div>
+                        <div class="col-2">
+                            <p class="card-text text-center">x{{ order_detail.quantity }}</p>
+                        </div>
+                        <div class="col-3">
+                            <p class="card-text text-center">{{ order_detail.total}}$</p>
+                        </div>
+                    </div>
+                    <hr />
+                    <br />
+                    {% endfor %}
+                    <p class="text-left font-weight-bold">Total: <span class="price_tag">{{ order_total[order.order_id] }}$</span></p>
+                    <a href="#" class="btn btn-primary">Download Invoice</a>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 col-md-12">
+            <p class="text-center">No orders yet. Go to <a href="{{url_for('shop')}}">Shop</a>!</p>
+            {% endif %}
+        </div>
+    </div>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}
