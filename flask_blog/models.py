@@ -2,6 +2,7 @@ from datetime import datetime
 from flask_blog import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy import update
+from sqlalchemy.sql import func
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -72,6 +73,7 @@ class User(db.Model, UserMixin):
 class Orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     order_number = db.Column(db.Integer, nullable=False)
+    date_order = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     shipper_id = db.Column(db.Integer, db.ForeignKey('shipper.shipper_id'), nullable=False)
 

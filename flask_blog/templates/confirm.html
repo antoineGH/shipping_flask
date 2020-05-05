@@ -2,9 +2,6 @@
 {% block content %}
     <div class="row mb-3">
         {% if order_user %}
-        <div class="col-12 col-md-12">
-            <h5>Order Informations</h5>
-        </div>
         {% for order in order_user %}
         <div class="col-10 col-md-6 mb-4">
             <div class="card">
@@ -13,6 +10,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Order Number: {{ order.order_number }}</h5>
+                    <p class="card-text text-center"><span> {{ order.date_order }}</span></p>
                     <p class="card-text text-left font-weight-bold">Transporter :</p>
                     <p class="card-text text-left"><span>{{ order.shipper.company_name }}</span> (<a href="tel:{{ order.shipper.phone}}">Contact: {{ order.shipper.phone}}</a>)</p>
                     <br />

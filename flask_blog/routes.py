@@ -242,7 +242,7 @@ def confirm():
 
     order_details = {}
     for order in order_user:
-        order_detail_id = OrderDetails.query.filter_by(order_id=order.order_id).all()
+        order_detail_id = OrderDetails.query.filter_by(order_id=order.order_id).all()  
         order_details[order.order_id] = order_detail_id
         
     return render_template('confirm.html', title='Order', order_user=order_user, order_details=order_details, order_total=order_total)
