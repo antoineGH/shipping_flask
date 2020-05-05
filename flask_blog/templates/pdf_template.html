@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='main.css') }}>
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='/fontawesome-5.13.0/css/all.css') }}>
+    {% if title %}
+    <title>Invoice - {{ order_user.order_number }}</title>
+    {% else %}
+    <title>UPS</title>
+    {% endif %}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <p>Invoice {{ order_user.order_number }}</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Order Number: {{ order_user.order_number }}</h5>
+                        <p class="card-text text-center"><span> {{ order_user.date_order }}</span></p>
+                        <p class="card-text text-right font-weight-bold text-uppercase">Transporter :</p>
+                        <p class="card-text text-right"><span>{{ order_user.shipper.company_name }}</span> (<a href="tel:{{ order_user.shipper.phone}}">Contact: {{ order_user.shipper.phone}}</a>)</p>
+                        <br />
+                        <p class="card-text text-left font-weight-bold text-uppercase">Bill To: </p>
+                        <p class="card-text text-left"><span>{{ order_user.user.first_name }} {{ order_user.user.last_name }}</span></p>
+                        <p class="card-text text-left"><span>{{ order_user.user.phone }}</span></p>
+                        <p class="card-text text-left"><span>{{ order_user.user.email }}</span></p>
+                        <p class="card-text text-left"><span>{{ order_user.user.address }}, {{ order_user.user.city }}, {{ order_user.user.postcode }}, {{ order_user.user.state }}. {{ order_user.user.country }}</span></p>
+                        <br />
+                        <p class="card-text text-left font-weight-bold text-uppercase">Order Details :</p>
+                        {% for order_detail in order_detail_list %}
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="text-left font-weight-light">Product Name: </span><span class="text-left font-weight-normal">"{{ order_detail.product.product_name }}"</span>
+                                <br />
+                                <span class="text-left font-weight-light">Unit Price: </span><span class="text-left font-weight-normal">{{ order_detail.price }}$</span>
+                                <br />
+                                <span class="text-left font-weight-light">Quantity: </span><span class="text-left font-weight-normal">{{ order_detail.quantity }}</span>
+                                <br />
+                                <span class="text-left font-weight-light">Total Article: </span><span class="text-left font-weight-normal">{{ order_detail.total }}$</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <br />
+                        {% endfor %}
+
+                    </div>
+                    <div class="col-12">
+                        <p class="font-weight-bold text-uppercase ml-1">Total: {{ total }}$</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- JS Script Bootstrap Import -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

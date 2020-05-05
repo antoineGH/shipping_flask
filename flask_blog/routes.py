@@ -1,7 +1,8 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, make_response
+import pdfkit
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
@@ -246,3 +247,25 @@ def confirm():
         order_details[order.order_id] = order_detail_id
         
     return render_template('confirm.html', title='Order', order_user=order_user, order_details=order_details, order_total=order_total)
+
+@app.route('/gen/<order_number>') # http://127.0.0.1:5000/gen/ON_AI2687
+def pdf_template(order_number):
+    
+    order_user = Orders.query.filter_by(order_number=order_number).first()
+    order_detail_list = OrderDetails.query.filter_by(order_id=order_user.order_id).all()  
+
+    total = 0
+    for order_detail in order_detail_list:
+        total= sum([order_detail.total], start=total)
+
+    rendered = render_template('pdf_template.html', order_user=order_user, order_detail_list=order_detail_list, total=total)
+
+    pdf = pdfkit.from_string(rendered, False)
+
+    response = make_response(pdf)
+    response.headers['content-type'] = 'application/pdf'
+    response.headers['content-disposition'] = 'inline; filename=invoice.pdf'
+
+    return response
+
+
