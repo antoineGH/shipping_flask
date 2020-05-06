@@ -134,3 +134,7 @@ class CreateOrderForm(FlaskForm):
     shipper_choice = get_shipper_choice()
     shipper_id = SelectField(label='Select Shipper', choices=shipper_choice)
     submit = SubmitField('Order')
+
+class GenInvoiceForm(FlaskForm):
+    order_number = HiddenField('Order Number')
+    submit = SubmitField('Order')

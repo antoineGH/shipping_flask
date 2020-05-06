@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, make_response
 import pdfkit
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm
+from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm, GenInvoiceForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
 from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number
 from flask_login import login_user, current_user, logout_user, login_required
@@ -196,10 +196,6 @@ def cart():
     orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
     order_details = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
 
-    for order_detail in order_details:
-        if order_detail.order_id:
-            print("Already Bought ")
-
     total_user = 0
     for order in orderuser:
         total_user += order.total
@@ -212,7 +208,6 @@ def cart():
 
             for order_detail in order_details:
                 order_detail.order_id = order.order_id
-                #Correct !!!
                 order_detail.user_id = 99
             db.session.commit()
             return redirect(url_for('confirm'))
@@ -228,10 +223,11 @@ def logout():
     logout_user()
     return redirect(url_for(('shop')))
 
-@app.route('/confirm')
+@app.route('/confirm', methods=['GET','POST'])
 @login_required
 def confirm():
     order_user = Orders.query.filter_by(user_id=current_user.user_id).all()
+    form = GenInvoiceForm()
 
     order_total = {}
     for order in order_user:
@@ -245,8 +241,12 @@ def confirm():
     for order in order_user:
         order_detail_id = OrderDetails.query.filter_by(order_id=order.order_id).all()  
         order_details[order.order_id] = order_detail_id
-        
-    return render_template('confirm.html', title='Order', order_user=order_user, order_details=order_details, order_total=order_total)
+
+    if form.validate_on_submit():
+        url_redirect = '/gen/' + form.order_number.data
+        return redirect(url_redirect)
+         
+    return render_template('confirm.html', title='Order', form=form, order_user=order_user, order_details=order_details, order_total=order_total)
 
 @app.route('/gen/<order_number>') # http://127.0.0.1:5000/gen/ON_AI2687
 def pdf_template(order_number):
