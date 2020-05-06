@@ -47,14 +47,14 @@ def category():
     form = CategoryForm()
     form_delete = DeleteCategoryForm()
 
-    if form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         category = Category(category_name=form.category_name.data, category_description=form.category_description.data)
         db.session.add(category)
         db.session.commit()
         flash(f'You have successfully created {category.category_name}', 'success')
         return redirect(url_for('category'))
 
-    if form_delete.validate_on_submit(): 
+    if form_delete.delete.data and form_delete.validate_on_submit(): 
         todelete = Category.query.filter_by(category_id=form_delete.category_delete_id.data).first()
         Category.query.filter_by(category_id=todelete.category_id).delete()   
         db.session.commit()

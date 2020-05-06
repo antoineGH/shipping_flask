@@ -32,8 +32,8 @@ class DeleteShipperForm(FlaskForm):
     delete = SubmitField('Delete')
 
 class CategoryForm(FlaskForm):
-    category_name = StringField('Category Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Category Name"})
-    category_description = StringField('Category Description', validators=[DataRequired(), Length(min=2, max=30)], render_kw={"placeholder":"Category Description"})
+    category_name = StringField('Category Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Name"})
+    category_description = StringField('Category Description', validators=[DataRequired(), Length(min=2, max=30)], render_kw={"placeholder":"Description"})
     submit = SubmitField('Add')
 
     def validate_category_name(self, category_name):
@@ -42,13 +42,8 @@ class CategoryForm(FlaskForm):
             raise ValidationError('That category name already exists. Please choose a different one.')
 
 class DeleteCategoryForm(FlaskForm):
-    category_delete_id = IntegerField('Delete Category ID', validators=[DataRequired(), NumberRange(min=0, max=1000)], render_kw={"placeholder": "Category ID "})
+    category_delete_id = HiddenField('Delete Category ID')
     delete = SubmitField('Delete')
-
-    def validate_category_delete_id(self, category_delete_id):
-        category_delete_id = Category.query.filter_by(category_id=category_delete_id.data).first()
-        if not category_delete_id:
-            raise ValidationError('Please select an existing Category ID.')
 
 class ProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Product Name"})
