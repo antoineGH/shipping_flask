@@ -46,9 +46,9 @@ class DeleteCategoryForm(FlaskForm):
     delete = SubmitField('Delete')
 
 class ProductForm(FlaskForm):
-    product_name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Product Name"})
-    product_description = StringField('Product Description', validators=[DataRequired(), Length(min=2, max=30)], render_kw={"placeholder":"Product Description"})
-    unit_price = FloatField('Unit Price', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Enter Unit Price"})
+    product_name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Name"})
+    product_description = StringField('Product Description', validators=[DataRequired(), Length(min=2, max=30)], render_kw={"placeholder":"Description"})
+    unit_price = FloatField('Unit Price', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Price"})
     category_choice = get_category_choice()
     category_id = SelectField(label='Category', choices=category_choice)
     picture = FileField('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
@@ -60,13 +60,8 @@ class ProductForm(FlaskForm):
             raise ValidationError('That product name already exists. Please choose a different one.')
 
 class DeleteProductForm(FlaskForm):
-    product_delete_id =  IntegerField('Delete Product ID', validators=[DataRequired(), NumberRange(min=0, max=1000)], render_kw={"placeholder": "Product ID "})
+    product_delete_id =  HiddenField('Delete Product ID')
     delete = SubmitField('Delete')
-
-    def validate_product_delete_it(self, product_delete_id):
-        product_delete_id = Category.query.filter_by(product_id=product_delete_id.data).first()
-        if not product_delete_id:
-            raise ValidationError('Please select an existing Product ID.')
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder": "First Name"})

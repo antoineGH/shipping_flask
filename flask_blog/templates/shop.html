@@ -13,7 +13,7 @@
                     {{ form.csrf_token() }}
                     {{ form.product_id(value=product.product_id) }}
                     <div class="row justify-content-center">
-                        <div class="col-6">
+                        <div class="col-6 text-right justify-content-right">
                             {% if form.quantity.errors %}
                             {{ form.quantity(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
@@ -22,10 +22,10 @@
                                 {% endfor %}
                             </div>
                             {% else %}
-                            {{ form.quantity(class="form-control form-control-lg quantity_field") }}
+                            {{ form.quantity(class="text-center form-control quantity_field form-control-quantity") }}
                             {% endif %}
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 text-left justify-content-left">
                             <button type=submit class="btn btn-md btn-dark buy_button"><i class="fas fa-shopping-cart fa-xs"></i> Buy</button>
                         </div>
                     </div>

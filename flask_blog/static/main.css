@@ -8,12 +8,15 @@ body {
 }
 
 .form-control-lg {
-    height: calc(2.075rem + 2px);
+    height: calc(2.525rem + 2px);
 }
 
-/*.buy_button {
-    margin-top: 12px;
-}*/
+.form-control-quantity {
+    height: calc(2.075rem + 2px);
+    width: 50%;
+    margin-left: 40%;
+}
+
 .form-control-choice {
     height: calc(2.575rem + 2px);
     width: 120%;

@@ -70,7 +70,7 @@ def product():
     form = ProductForm()
     form_delete = DeleteProductForm()
     
-    if form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture_product(form.picture.data)     
             product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data, image_product=picture_file)
@@ -82,7 +82,7 @@ def product():
         flash(f'You have successfully created {product.product_name}', 'success')
         return redirect(url_for('product'))
 
-    if form_delete.validate_on_submit(): 
+    if form_delete.delete.data and form_delete.validate_on_submit(): 
         todelete = Products.query.filter_by(product_id=form_delete.product_delete_id.data).first()
         Products.query.filter_by(product_id=todelete.product_id).delete()   
         db.session.commit()
