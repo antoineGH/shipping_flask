@@ -5,6 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_blog.models import Shipper, Category, Products, User
 from flask_blog.functions import get_category_choice, get_country, get_shipper_choice
+from markupsafe import Markup
 import pycountry
 
 class ShippingForm(FlaskForm):
@@ -27,13 +28,8 @@ class ShipperForm(FlaskForm):
             raise ValidationError('That phone number already exists. Please choose a different one.')
 
 class DeleteShipperForm(FlaskForm):
-    shipper_delete_id = IntegerField('Delete Shipper ID', validators=[DataRequired(), NumberRange(min=0, max=1000)], render_kw={"placeholder": "Shipper ID "})
+    shipper_delete_id = HiddenField('Delete Shipper ID')
     delete = SubmitField('Delete')
-
-    def validate_shipper_delete_id(self, shipper_delete_id):
-        shipper_delete_id = Shipper.query.filter_by(shipper_id=shipper_delete_id.data).first()
-        if not shipper_delete_id:
-            raise ValidationError('Please select an existing Shipper ID.')
 
 class CategoryForm(FlaskForm):
     category_name = StringField('Category Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Category Name"})

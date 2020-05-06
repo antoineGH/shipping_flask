@@ -6,7 +6,7 @@ import pdfkit
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm, GenInvoiceForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
-from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number
+from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number, calc_total_user
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import and_
 
@@ -24,14 +24,14 @@ def shippers():
     form = ShipperForm()
     form_delete = DeleteShipperForm()
 
-    if form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         shipper = Shipper(company_name=form.company_name.data, phone=form.phone.data)
         db.session.add(shipper)
         db.session.commit()
         flash(f'You have successfully created {shipper.company_name}', 'success')
         return redirect(url_for('shippers'))
 
-    if form_delete.validate_on_submit(): 
+    if form_delete.delete.data and form_delete.validate_on_submit(): 
         todelete = Shipper.query.filter_by(shipper_id=form_delete.shipper_delete_id.data).first()
         Shipper.query.filter_by(shipper_id=todelete.shipper_id).delete()   
         db.session.commit()
@@ -67,7 +67,6 @@ def category():
 @login_required
 def product():
     product = Products.query.all()
-    category = Category.query.all()
     form = ProductForm()
     form_delete = DeleteProductForm()
     
@@ -90,7 +89,6 @@ def product():
         flash(f'You have successfully delete {todelete.product_name}', 'success')
         return redirect(url_for('product'))
     
-    #image_file = url_for('static', filename='products_pics/' +  current_user.image_file)
     return render_template('product.html', title='Products', form=form, product=product, form_delete=form_delete, category=category)
 
 @app.route('/register', methods=['GET','POST'])
@@ -196,9 +194,7 @@ def cart():
     orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
     order_details = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
 
-    total_user = 0
-    for order in orderuser:
-        total_user += order.total
+    total_user = calc_total_user(orderuser)
 
     if form.validate_on_submit():
         if current_user.is_authenticated:
@@ -208,7 +204,7 @@ def cart():
 
             for order_detail in order_details:
                 order_detail.order_id = order.order_id
-                order_detail.user_id = 99
+                order_detail.user_id = 9999
             db.session.commit()
             return redirect(url_for('confirm'))
 
@@ -248,7 +244,7 @@ def confirm():
          
     return render_template('confirm.html', title='Order', form=form, order_user=order_user, order_details=order_details, order_total=order_total)
 
-@app.route('/gen/<order_number>') # http://127.0.0.1:5000/gen/ON_AI2687
+@app.route('/gen/<order_number>') 
 def pdf_template(order_number):
     
     order_user = Orders.query.filter_by(order_number=order_number).first()

@@ -6,23 +6,19 @@ from flask_blog import app
 from flask_blog.models import Shipping, Category, Shipper
 import pycountry
 
-# --- Calculate Total Cart
-
-def calc_total_cart(orderdetails):
-    for prod in orderdetails.product:
-        print(prod)
-        print(type(prod))
-        print(prod.product_name)
-
+# --- Calculate Total User
+def calc_total_user(orderuser):
+    total_user = 0
+    for order in orderuser:
+        total_user += order.total
+    return total_user
 
 # --- Order Details Number
-
 def gen_order_number():
     order_number = 'ON_' + (random.choice('abcdefghij')).capitalize()  + (random.choice('abcdefghij')).capitalize()  + str(random.randrange(1000, 9999))
     return order_number 
 
 # --- Save Pictures
-
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -58,7 +54,6 @@ def get_country():
     return country_choices
 
 # --- Category Choices
- 
 def get_category_choice():
     category_list = (Category.query.all())
     category_choices = []
@@ -68,7 +63,6 @@ def get_category_choice():
     return category_choices
 
 # --- Shipper Choices
-
 def get_shipper_choice():
     shipper_list = (Shipper.query.all())
     shipper_choices = []
@@ -78,7 +72,6 @@ def get_shipper_choice():
     return shipper_choices
 
 # --- Shipping Functions 
-
 def ground_shipping(weight):
   if weight <= 2:
     gs_lt_2 = Shipping.query.filter_by(method='Ground Shipping').filter_by(weight='<2lb').first()
@@ -121,7 +114,5 @@ def compare_shipping(weight=None):
             return cost_premium, "Premium Shipping"
     else:
         return None
-
-# Variables 
 
 cost_premium = (Shipping.query.filter_by(method='Premium Shipping').first()).price_per_pound
