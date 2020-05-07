@@ -6,9 +6,18 @@ import pdfkit
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm, GenInvoiceForm
 from flask_blog.models import Shipping, User, Orders, OrderDetails, Products, Category, Shipper
-from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number, calc_total_user
+from flask_blog.functions import compare_shipping, get_category_choice, save_picture, save_picture_product, gen_order_number, calc_total_user, calc_total_item
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import and_
+
+@app.context_processor
+def inject_quantity():
+    if current_user.is_authenticated:
+        orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
+        total_item = calc_total_item(orderuser)
+        return {'g_total_item': total_item}
+    else:
+        return {'g_total_item': "empty"}
 
 @app.route('/shipping', methods=['GET','POST'])
 def shipping():
@@ -176,7 +185,6 @@ def shop():
 
             db.session.add(orderdetails)
             db.session.commit()
-            flash('Successfully added {} to your cart.'.format(product.product_name), 'success')
             return redirect(url_for('shop'))
     
         elif form.validate_on_submit():
@@ -194,6 +202,7 @@ def cart():
     orderuser = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
     order_details = OrderDetails.query.filter_by(user_id=current_user.user_id).all()
 
+    total_item = calc_total_item(orderuser)
     total_user = calc_total_user(orderuser)
 
     if form.validate_on_submit():
@@ -212,7 +221,7 @@ def cart():
             flash('Please Log In to Add to Cart.', 'warning')
             return redirect(url_for('login'))
 
-    return render_template('cart.html', title='Cart', form=form, order_details=order_details, total_user=total_user)
+    return render_template('cart.html', title='Cart', form=form, order_details=order_details, total_user=total_user, total_item=total_item)
 
 @app.route('/logout')
 def logout():

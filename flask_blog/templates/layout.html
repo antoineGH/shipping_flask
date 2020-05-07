@@ -44,7 +44,11 @@
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                    <a class="nav-item nav-link" href="{{url_for('cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart</a>
+                    {% if g_total_item %}
+                        <a class="nav-item nav-link" href="{{url_for('cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart <span class=" ml-1 dot text-white text-center">{{g_total_item}}</span></a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{{url_for('cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart </a>
+                    {% endif %}
                     <span class="reminder mt-2"></span><a class="nav-item nav-link" href="{{ url_for('account') }}"><i class="fas fa-user-cog fa-sm"></i> {{ current_user.email }}</a>
                     <a class="nav-item nav-link" href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt fa-sm"></i> Logout</a>
                     {% else %}
