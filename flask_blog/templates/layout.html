@@ -28,7 +28,7 @@
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{{url_for('shop')}}"><i class="fas fa-truck fa-sm"></i> Shop</a>
                     <a class="nav-item nav-link ml-2" href="{{url_for('shipping')}}"><i class="fas fa-shopping-bag fa-sm"></i> Shipping</a>
-                    {% if current_user.is_authenticated %}
+                    {% if current_user.is_authenticated and current_user.role == 1 %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-tasks ml-2"></i> Manage

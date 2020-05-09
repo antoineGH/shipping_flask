@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, make_response
+from flask import render_template, url_for, flash, redirect, request, make_response, abort
 import pdfkit
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm, GenInvoiceForm
@@ -29,76 +29,88 @@ def shipping():
 @app.route('/shippers', methods=['GET', 'POST'])
 @login_required
 def shippers():
-    shipper = Shipper.query.all()
-    form = ShipperForm()
-    form_delete = DeleteShipperForm()
+    if current_user.role == 0:
+        abort(403)
+    else:
+        shipper = Shipper.query.all()
+        form = ShipperForm()
+        form_delete = DeleteShipperForm()
 
-    if form.submit.data and form.validate_on_submit():
-        shipper = Shipper(company_name=form.company_name.data, phone=form.phone.data)
-        db.session.add(shipper)
-        db.session.commit()
-        flash(f'You have successfully created {shipper.company_name}', 'success')
-        return redirect(url_for('shippers'))
+        if form.submit.data and form.validate_on_submit():
+            shipper = Shipper(company_name=form.company_name.data, phone=form.phone.data)
+            db.session.add(shipper)
+            db.session.commit()
+            flash(f'You have successfully created {shipper.company_name}', 'success')
+            return redirect(url_for('shippers'))
 
-    if form_delete.delete.data and form_delete.validate_on_submit(): 
-        todelete = Shipper.query.filter_by(shipper_id=form_delete.shipper_delete_id.data).first()
-        Shipper.query.filter_by(shipper_id=todelete.shipper_id).delete()   
-        db.session.commit()
-        flash(f'You have successfully delete {todelete.company_name}', 'success')
-        return redirect(url_for('shippers'))
+        if form_delete.delete.data and form_delete.validate_on_submit(): 
+            todelete = Shipper.query.filter_by(shipper_id=form_delete.shipper_delete_id.data).first()
+            Shipper.query.filter_by(shipper_id=todelete.shipper_id).delete()   
+            db.session.commit()
+            flash(f'You have successfully delete {todelete.company_name}', 'success')
+            return redirect(url_for('shippers'))
 
-    return render_template('shippers.html', title='Shippers', form=form, form_delete=form_delete, shipper=shipper)
+        return render_template('shippers.html', title='Shippers', form=form, form_delete=form_delete, shipper=shipper)
 
 @app.route('/category', methods=['GET', 'POST'])
 @login_required
 def category():
-    category = Category.query.all()
-    form = CategoryForm()
-    form_delete = DeleteCategoryForm()
+    if current_user.role == 0:
+        abort(403)
+    else:
+        category = Category.query.all()
+        form = CategoryForm()
+        form_delete = DeleteCategoryForm()
 
-    if form.submit.data and form.validate_on_submit():
-        category = Category(category_name=form.category_name.data, category_description=form.category_description.data)
-        db.session.add(category)
-        db.session.commit()
-        flash(f'You have successfully created {category.category_name}', 'success')
-        return redirect(url_for('category'))
+        if form.submit.data and form.validate_on_submit():
+            category = Category(category_name=form.category_name.data, category_description=form.category_description.data)
+            db.session.add(category)
+            db.session.commit()
+            flash(f'You have successfully created {category.category_name}', 'success')
+            return redirect(url_for('category'))
 
-    if form_delete.delete.data and form_delete.validate_on_submit(): 
-        todelete = Category.query.filter_by(category_id=form_delete.category_delete_id.data).first()
-        Category.query.filter_by(category_id=todelete.category_id).delete()   
-        db.session.commit()
-        flash(f'You have successfully delete {todelete.category_name}', 'success')
-        return redirect(url_for('category'))
+        if form_delete.delete.data and form_delete.validate_on_submit(): 
+            todelete = Category.query.filter_by(category_id=form_delete.category_delete_id.data).first()
+            Category.query.filter_by(category_id=todelete.category_id).delete()   
+            db.session.commit()
+            flash(f'You have successfully delete {todelete.category_name}', 'success')
+            return redirect(url_for('category'))
     
-    return render_template('category.html', title='Categories', form=form, form_delete=form_delete, category=category)
+        return render_template('category.html', title='Categories', form=form, form_delete=form_delete, category=category)
 
 @app.route('/product', methods=['GET', 'POST'])
 @login_required
 def product():
-    product = Products.query.all()
-    form = ProductForm()
-    form_delete = DeleteProductForm()
+    print(current_user.role)
+    print(type(current_user.role))
+    if current_user.role == 0:
+        abort(403)
+    else:
+        page = request.args.get('page', 1, type=int)
+        product = Products.query.paginate(per_page=8, page=page)
+        form = ProductForm()
+        form_delete = DeleteProductForm()
     
-    if form.submit.data and form.validate_on_submit():
-        if form.picture.data:
-            picture_file = save_picture_product(form.picture.data)     
-            product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data, image_product=picture_file)
-        else:
-            product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data)
+        if form.submit.data and form.validate_on_submit():
+            if form.picture.data:
+                picture_file = save_picture_product(form.picture.data)     
+                product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data, image_product=picture_file)
+            else:
+                product = Products(product_name=form.product_name.data, product_description=form.product_description.data, unit_price=form.unit_price.data, category_id=form.category_id.data)
         
-        db.session.add(product)
-        db.session.commit()
-        flash(f'You have successfully created {product.product_name}', 'success')
-        return redirect(url_for('product'))
+            db.session.add(product)
+            db.session.commit()
+            flash(f'You have successfully created {product.product_name}', 'success')
+            return redirect(url_for('product'))
 
-    if form_delete.delete.data and form_delete.validate_on_submit(): 
-        todelete = Products.query.filter_by(product_id=form_delete.product_delete_id.data).first()
-        Products.query.filter_by(product_id=todelete.product_id).delete()   
-        db.session.commit()
-        flash(f'You have successfully delete {todelete.product_name}', 'success')
-        return redirect(url_for('product'))
+        if form_delete.delete.data and form_delete.validate_on_submit(): 
+            todelete = Products.query.filter_by(product_id=form_delete.product_delete_id.data).first()
+            Products.query.filter_by(product_id=todelete.product_id).delete()   
+            db.session.commit()
+            flash(f'You have successfully delete {todelete.product_name}', 'success')
+            return redirect(url_for('product', page=page))
     
-    return render_template('product.html', title='Products', form=form, product=product, form_delete=form_delete, category=category)
+        return render_template('product.html', title='Products', form=form, product=product, form_delete=form_delete, category=category)
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -163,7 +175,8 @@ def account():
 @app.route('/')
 @app.route('/shop', methods=['GET','POST'])
 def shop():
-    products = Products.query.all()  
+    page = request.args.get('page', 1, type=int)
+    products = Products.query.paginate(per_page=8, page=page)
     form = AddOrderForm()
 
     if form.validate_on_submit():
@@ -194,7 +207,7 @@ def shop():
     elif request.method == 'GET':
         form.quantity.data = 1    
 
-    return render_template('shop.html', title='Shop', products=products, form=form, )
+    return render_template('shop.html', title='Shop', products=products, form=form)
 
 @app.route('/cart', methods=['GET','POST'])
 def cart():
