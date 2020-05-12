@@ -179,8 +179,21 @@ def shop():
     products = Products.query.paginate(per_page=8, page=page)
     form = AddOrderForm()
 
-    if form.validate_on_submit():
-        if current_user.is_authenticated:
+    if request.method == 'GET':
+        form.quantity.data = 1    
+
+    if current_user.is_authenticated:
+        if 'asc' in request.form:
+            products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=8, page=page)
+            return render_template('shop.html', title='Shop', products=products, form=form )
+            print("asc")
+
+        if 'desc' in request.form:
+            products = Products.query.order_by(Products.unit_price.desc()).paginate(per_page=8, page=page)
+            return render_template('shop.html', title='Shop', products=products, form=form)
+            print("desc")
+
+        if form.validate_on_submit():
             product = Products.query.filter_by(product_id=form.product_id.data).first()
             price = product.unit_price
             product_id = product.product_id
@@ -200,13 +213,10 @@ def shop():
             db.session.commit()
             return redirect(url_for('shop'))
     
-        elif form.validate_on_submit():
-            flash('Please Log In to Add in your Cart.', 'warning')
-            return redirect(url_for('login'))
+    elif form.validate_on_submit() or 'asc' in request.form or 'desc' in request.form:
+        flash('Please Log In to Add in your Cart.', 'warning')
+        return redirect(url_for('login'))
     
-    elif request.method == 'GET':
-        form.quantity.data = 1    
-
     return render_template('shop.html', title='Shop', products=products, form=form)
 
 @app.route('/cart', methods=['GET','POST'])

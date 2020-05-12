@@ -1,6 +1,20 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div class="row justify-content-center mb-3">
+        {% if current_user.is_authenticated %}
+        <div class="col-12 col-md-12 mb-4">
+            <span>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <button type=submit name="asc" class="btn btn-md btn-dark buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Filter by Price (<i class="fas fa-arrow-up fa-xs"></i>)</button>
+                </form>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <button type=submit name="desc" class="btn btn-md btn-dark buy_button mt-2" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Filter by Price (<i class="fas fa-arrow-down fa-xs"></i>)</button>
+                </form>
+            </span>
+        </div>
+        {% endif %}
         {% for product in products.items %}
         <div class="col-10 col-md-3">
             <div class="card mb-4">
@@ -51,4 +65,4 @@
     </div>
 
 
-    {% endblock content %}
+        {% endblock content %}
