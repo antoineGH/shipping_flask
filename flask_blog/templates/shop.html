@@ -1,68 +1,81 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div class="row justify-content-center mb-3">
-        {% if current_user.is_authenticated %}
-        <div class="col-12 col-md-12 mb-4">
-            <span>
-                <form method="POST" action="">
-                    {{ form.hidden_tag() }}
-                    <button type=submit name="asc" class="btn btn-md btn-dark buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Filter by Price (<i class="fas fa-arrow-up fa-xs"></i>)</button>
-                </form>
-                <form method="POST" action="">
-                    {{ form.hidden_tag() }}
-                    <button type=submit name="desc" class="btn btn-md btn-dark buy_button mt-2" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Filter by Price (<i class="fas fa-arrow-down fa-xs"></i>)</button>
-                </form>
-            </span>
+        <div class="col-10 col-md mb-2">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <button type=submit name="az" class="btn btn-sm btn-secondary buy_button" value="az"><i class="fas fa-sort-alpha-down fa-sm"></i> Order by Name</button>
+            </form>
         </div>
-        {% endif %}
-        {% for product in products.items %}
-        <div class="col-10 col-md-3">
-            <div class="card mb-4">
-                <div class="card-header text-white-50">Category / {{ product.category.category_name}}</div>
-                <a href="#"><img class="card-img-top product-img mt-3" src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.product_name }}</h5>
-                    <p class="card-text price_tag font-weight-bold">{{ product.unit_price }}$</p>
-                    <form method="POST" action="">
-                        {{ form.csrf_token() }}
-                        {{ form.product_id(value=product.product_id) }}
-                        <div class="row justify-content-center">
-                            <div class="col-6 text-right justify-content-right">
-                                {% if form.quantity.errors %}
-                                {{ form.quantity(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.quantity.errors %}
-                                    <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                                {% else %}
-                                {{ form.quantity(class="text-center form-control quantity_field form-control-quantity") }}
-                                {% endif %}
-                            </div>
-                            <div class="col-6 text-left justify-content-left">
-                                <button type=submit class="btn btn-md btn-dark buy_button"><i class="fas fa-shopping-cart fa-xs"></i> Buy</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="col-10 col-md">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <button type=submit name="za" class="btn btn-sm btn-secondary buy_button" value="za"><i class="fas fa-sort-alpha-down-alt fa-sm"></i> Order by Name</button>
+            </form>
         </div>
-        {% endfor %}
-        <div class="col-12 col-md-12">
-            <!--Pagination-->
-            {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-            {% if page_num %}
-            {% if products.page == page_num %}
-            <a class="btn btn-secondary mb-4" href="{{ url_for('shop', page=page_num)}}">{{ page_num }}</a>
-            {% else %}
-            <a class="btn btn-outline-secondary mb-4 ml-1 mr-1" href="{{ url_for('shop', page=page_num)}}">{{ page_num }}</a>
-            {% endif %}
-            {% else %}
-            ...
-            {% endif %}
-            {% endfor %}
+        <div class="col-10 col-md">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <button type=submit name="asc" class="btn btn-sm btn-secondary buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price (<i class="fas fa-arrow-up fa-xs"></i>)</button>
+            </form>
+        </div>
+        <div class="col-10 col-md">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <button type=submit name="desc" class="btn btn-sm btn-secondary buy_button" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price (<i class="fas fa-arrow-down fa-xs"></i>)</button>
+            </form>
         </div>
     </div>
-
-
-        {% endblock content %}
+<div class="row justify-content-center mb-3">
+    {% for product in products.items %}
+    <div class="col-12 col-md-auto">
+        <div class="card mb-4">
+            <div class="card-header text-white-50">Category / {{ product.category.category_name}}</div>
+            <a href="#"><img class="card-img-top product-img mt-3" src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
+            <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <p class="card-text price_tag font-weight-bold">{{ product.unit_price }}$</p>
+                <form method="POST" action="">
+                    {{ form.csrf_token() }}
+                    {{ form.product_id(value=product.product_id) }}
+                    <div class="row justify-content-center">
+                        <div class="col-6 text-right justify-content-right">
+                            {% if form.quantity.errors %}
+                            {{ form.quantity(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.quantity(class="text-center form-control quantity_field form-control-quantity") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-6 text-left justify-content-left">
+                            <button type=submit class="btn btn-md btn-dark buy_button"><i class="fas fa-shopping-cart fa-xs"></i> Buy</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-12 col-md-12">
+        <!--Pagination-->
+        {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        {% if products.page == page_num %}
+        <a class="btn btn-secondary mb-4" href="{{ url_for('shop', page=page_num)}}">{{ page_num }}</a>
+        {% else %}
+        <a class="btn btn-outline-secondary mb-4 ml-1 mr-1" href="{{ url_for('shop', page=page_num)}}">{{ page_num }}</a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock content %}

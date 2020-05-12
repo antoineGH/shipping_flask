@@ -176,7 +176,7 @@ def account():
 @app.route('/shop', methods=['GET','POST'])
 def shop():
     page = request.args.get('page', 1, type=int)
-    products = Products.query.paginate(per_page=8, page=page)
+    products = Products.query.paginate(per_page=9, page=page)
     form = AddOrderForm()
 
     if request.method == 'GET':
@@ -184,12 +184,22 @@ def shop():
 
     if current_user.is_authenticated:
         if 'asc' in request.form:
-            products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=8, page=page)
+            products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=9, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form )
             print("asc")
 
         if 'desc' in request.form:
-            products = Products.query.order_by(Products.unit_price.desc()).paginate(per_page=8, page=page)
+            products = Products.query.order_by(Products.unit_price.desc()).paginate(per_page=9, page=page)
+            return render_template('shop.html', title='Shop', products=products, form=form)
+            print("desc")
+
+        if 'az' in request.form:
+            products = Products.query.order_by(Products.product_name.asc()).paginate(per_page=9, page=page)
+            return render_template('shop.html', title='Shop', products=products, form=form )
+            print("asc")
+
+        if 'za' in request.form:
+            products = Products.query.order_by(Products.product_name.desc()).paginate(per_page=9, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form)
             print("desc")
 

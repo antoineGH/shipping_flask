@@ -7,7 +7,6 @@ from flask_blog.models import Shipping, Category, Shipper
 import pycountry
 
 # --- Calculate Total Item
-
 def calc_total_item(orderuser):
     total_item = 0
     for order in orderuser:

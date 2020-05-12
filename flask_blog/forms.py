@@ -49,10 +49,13 @@ class ProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=20)], render_kw={"placeholder":"Name"})
     product_description = StringField('Product Description', validators=[DataRequired(), Length(min=2, max=30)], render_kw={"placeholder":"Description"})
     unit_price = FloatField('Unit Price', validators=[DataRequired(), NumberRange(min=0, max=100)], render_kw={"placeholder": "Price"})
-    category_choice = get_category_choice()
-    category_id = SelectField(label='Category', choices=category_choice)
+    category_id = SelectField(label='Category',  validators=[DataRequired()])
     picture = FileField('Change Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Add')
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.category_id.choices = get_category_choice()
 
     def validate_product_name(self, product_name):
         product_name = Products.query.filter_by(product_name=product_name.data).first()
@@ -118,8 +121,12 @@ class AddOrderForm(FlaskForm):
 
 class CreateOrderForm(FlaskForm):
     shipper_choice = get_shipper_choice()
-    shipper_id = SelectField(label='Select Shipper', choices=shipper_choice)
+    shipper_id = SelectField(label='Select Shipper', validators=[DataRequired()])
     submit = SubmitField('Order')
+
+    def __init__(self, *args, **kwargs):
+        super(CreateOrderForm, self).__init__(*args, **kwargs)
+        self.shipper_id.choices = get_shipper_choice()
 
 class GenInvoiceForm(FlaskForm):
     order_number = HiddenField('Order Number')
