@@ -114,6 +114,10 @@ delete-shipper span {
     display: none;
 }
 
+.noHover:hover {
+    text-decoration: none;
+}
+
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #343a40;
     color: white;

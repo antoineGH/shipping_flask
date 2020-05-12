@@ -176,7 +176,7 @@ def account():
 @app.route('/shop', methods=['GET','POST'])
 def shop():
     page = request.args.get('page', 1, type=int)
-    products = Products.query.paginate(per_page=9, page=page)
+    products = Products.query.paginate(per_page=8, page=page)
     form = AddOrderForm()
 
     if request.method == 'GET':
@@ -184,22 +184,22 @@ def shop():
 
     if current_user.is_authenticated:
         if 'asc' in request.form:
-            products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=9, page=page)
+            products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=8, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form )
             print("asc")
 
         if 'desc' in request.form:
-            products = Products.query.order_by(Products.unit_price.desc()).paginate(per_page=9, page=page)
+            products = Products.query.order_by(Products.unit_price.desc()).paginate(per_page=8, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form)
             print("desc")
 
         if 'az' in request.form:
-            products = Products.query.order_by(Products.product_name.asc()).paginate(per_page=9, page=page)
+            products = Products.query.order_by(Products.product_name.asc()).paginate(per_page=8, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form )
             print("asc")
 
         if 'za' in request.form:
-            products = Products.query.order_by(Products.product_name.desc()).paginate(per_page=9, page=page)
+            products = Products.query.order_by(Products.product_name.desc()).paginate(per_page=8, page=page)
             return render_template('shop.html', title='Shop', products=products, form=form)
             print("desc")
 
@@ -340,5 +340,64 @@ def product_desc(product_id):
         return redirect(url_for('login'))
 
     return render_template('product_desc.html', title=product.product_name, product=product, form=form)
+
+@app.route('/category/<int:category_id>', methods=['GET','POST'])
+def shop_category(category_id):
+    page = request.args.get('page', 1, type=int)
+    products = Products.query.filter_by(category_id=category_id).paginate(per_page=8, page=page)
+    category = Category.query.filter_by(category_id=category_id).first()
+    category_name = category.category_name.title()
+    form = AddOrderForm()
+
+    if request.method == 'GET':
+        form.quantity.data = 1    
+
+    if current_user.is_authenticated:
+        if 'asc' in request.form:
+            products = Products.query.order_by(Products.unit_price.asc()).filter_by(category_id=category_id).paginate(per_page=8, page=page)
+            form.quantity.data = 1 
+            return render_template('shop_category.html', title='Shop - '+ category_name, products=products, form=form, category_name=category_name)
+
+        if 'desc' in request.form:
+            products = Products.query.order_by(Products.unit_price.desc()).filter_by(category_id=category_id).paginate(per_page=8, page=page)
+            form.quantity.data = 1 
+            return render_template('shop_category.html', title='Shop - '+ category_name, products=products, form=form, category_name=category_name)
+
+        if 'az' in request.form:
+            products = Products.query.order_by(Products.product_name.asc()).filter_by(category_id=category_id).paginate(per_page=8, page=page)
+            form.quantity.data = 1 
+            return render_template('shop_category.html', title='Shop - '+ category_name, products=products, form=form, category_name=category_name)
+
+        if 'za' in request.form:
+            products = Products.query.order_by(Products.product_name.desc()).filter_by(category_id=category_id).paginate(per_page=8, page=page)
+            form.quantity.data = 1 
+            return render_template('shop_category.html', title='Shop - '+ category_name, products=products, form=form, category_name=category_name)
+
+
+        if form.validate_on_submit():
+            product = Products.query.filter_by(product_id=form.product_id.data).first()
+            price = product.unit_price
+            product_id = product.product_id
+            quantity = form.quantity.data
+            user_id = current_user.user_id
+            total = float(quantity * price)
+        
+            orderdetails = OrderDetails.query.filter(and_(OrderDetails.product_id == form.product_id.data, OrderDetails.order_id == 0)).first()
+                 
+            if orderdetails:
+                orderdetails.quantity += form.quantity.data
+                orderdetails.total += (form.quantity.data * orderdetails.price)
+            else:
+                orderdetails = OrderDetails(quantity=quantity, price=price, total=total, user_id=user_id , order_id = 0, product_id=product_id)
+
+            db.session.add(orderdetails)
+            db.session.commit()
+            return redirect(url_for('shop'))
+    
+    elif form.validate_on_submit() or 'asc' in request.form or 'desc' in request.form or 'az' in request.form or 'za' in request.form:
+        flash('Please Log In to Add in your Cart.', 'warning')
+        return redirect(url_for('login'))
+    
+    return render_template('shop_category.html', title='Shop - '+ category_name, products=products, form=form, category_name=category_name)
 
 

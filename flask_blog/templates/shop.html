@@ -1,37 +1,37 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div class="row justify-content-center mb-3">
-        <div class="col-10 col-md mb-2">
+        <div class="col-5 col-md mb-2">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <button type=submit name="az" class="btn btn-sm btn-secondary buy_button" value="az"><i class="fas fa-sort-alpha-down fa-sm"></i> Order by Name</button>
             </form>
         </div>
-        <div class="col-10 col-md">
+        <div class="col-5 col-md mb-2">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <button type=submit name="za" class="btn btn-sm btn-secondary buy_button" value="za"><i class="fas fa-sort-alpha-down-alt fa-sm"></i> Order by Name</button>
             </form>
         </div>
-        <div class="col-10 col-md">
+        <div class="col-5 col-md mb-2">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
-                <button type=submit name="asc" class="btn btn-sm btn-secondary buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price (<i class="fas fa-arrow-up fa-xs"></i>)</button>
+                <button type=submit name="asc" class="btn btn-sm btn-secondary buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price <i class="fas fa-arrow-up fa-xs"></i></button>
             </form>
         </div>
-        <div class="col-10 col-md">
+        <div class="col-5 col-md mb-2">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
-                <button type=submit name="desc" class="btn btn-sm btn-secondary buy_button" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price (<i class="fas fa-arrow-down fa-xs"></i>)</button>
+                <button type=submit name="desc" class="btn btn-sm btn-secondary buy_button" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price <i class="fas fa-arrow-down fa-xs"></i></button>
             </form>
         </div>
     </div>
 <div class="row justify-content-center mb-3">
     {% for product in products.items %}
-    <div class="col-12 col-md-auto">
+    <div class="col-10 col-md-3">
         <div class="card mb-4">
-            <div class="card-header text-white-50">Category / {{ product.category.category_name}}</div>
-            <a href="{{ url_for('product_desc', product_id=product.product_id)}}"><img class="card-img-top product-img mt-3" src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
+            <a class="noHover" href="{{ url_for('shop_category', category_id=product.category_id) }}"><div class="card-header text-white-50">{{ product.category.category_name}}</div></a>
+            <a href="{{ url_for('product_desc', product_id=product.product_id)}}"><img class="mt-3" src={{url_for('static', filename='products_pics/' +  product.image_product)}}></a>
             <div class="card-body">
                 <h5 class="card-title">{{ product.product_name }}</h5>
                 <p class="card-text price_tag font-weight-bold">{{ product.unit_price }}$</p>
@@ -77,5 +77,5 @@
         {% endfor %}
     </div>
 </div>
-</div>
+
 {% endblock content %}
