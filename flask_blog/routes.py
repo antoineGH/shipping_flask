@@ -223,7 +223,7 @@ def shop():
             db.session.commit()
             return redirect(url_for('shop'))
     
-    elif form.validate_on_submit() or 'asc' in request.form or 'desc' in request.form:
+    elif form.validate_on_submit() or 'asc' in request.form or 'desc' in request.form or 'az' in request.form or 'za' in request.form:
         flash('Please Log In to Add in your Cart.', 'warning')
         return redirect(url_for('login'))
     
@@ -305,5 +305,40 @@ def pdf_template(order_number):
     response.headers['content-disposition'] = 'inline; filename=invoice.pdf'
 
     return response
+
+@app.route('/product/<int:product_id>', methods=['GET','POST'])
+def product_desc(product_id):
+    form = AddOrderForm()
+    product = Products.query.get_or_404(product_id)
+
+    if request.method == 'GET':
+        form.quantity.data = 1    
+
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            product = Products.query.filter_by(product_id=form.product_id.data).first()
+            price = product.unit_price
+            product_id = product.product_id
+            quantity = form.quantity.data
+            user_id = current_user.user_id
+            total = float(quantity * price)
+        
+            orderdetails = OrderDetails.query.filter(and_(OrderDetails.product_id == form.product_id.data, OrderDetails.order_id == 0)).first()
+                 
+            if orderdetails:
+                orderdetails.quantity += form.quantity.data
+                orderdetails.total += (form.quantity.data * orderdetails.price)
+            else:
+                orderdetails = OrderDetails(quantity=quantity, price=price, total=total, user_id=user_id , order_id = 0, product_id=product_id)
+
+            db.session.add(orderdetails)
+            db.session.commit()
+            return redirect(url_for('shop'))
+    
+    elif form.validate_on_submit() :
+        flash('Please Log In to Add in your Cart.', 'warning')
+        return redirect(url_for('login'))
+
+    return render_template('product_desc.html', title=product.product_name, product=product, form=form)
 
 

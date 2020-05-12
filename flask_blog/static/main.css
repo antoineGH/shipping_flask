@@ -26,6 +26,12 @@ body {
     height: calc(2.525rem + 2px);
 }
 
+.form-control-quantity_desc {
+    height: calc(2.075rem + 2px);
+    width: 25%;
+    margin-left: 37.6%;
+}
+
 .form-control-quantity {
     height: calc(2.075rem + 2px);
     width: 50%;
