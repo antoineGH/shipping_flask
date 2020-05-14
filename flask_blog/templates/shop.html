@@ -3,25 +3,29 @@
     <div class="row justify-content-center mb-3">
         <div class="col-5 col-md mb-2">
             <form method="POST" action="">
-                {{ form.hidden_tag() }}
+                {{ filterform.csrf_token() }}
+                {{ filterform.filter(value="az") }}
                 <button type=submit name="az" class="btn btn-sm btn-secondary buy_button" value="az"><i class="fas fa-sort-alpha-down fa-sm"></i> Order by Name</button>
             </form>
         </div>
         <div class="col-5 col-md mb-2">
             <form method="POST" action="">
-                {{ form.hidden_tag() }}
+                {{ filterform.csrf_token() }}
+                {{ filterform.filter(value="za") }}
                 <button type=submit name="za" class="btn btn-sm btn-secondary buy_button" value="za"><i class="fas fa-sort-alpha-down-alt fa-sm"></i> Order by Name</button>
             </form>
         </div>
         <div class="col-5 col-md mb-2">
             <form method="POST" action="">
-                {{ form.hidden_tag() }}
+                {{ filterform.csrf_token() }}
+                {{ filterform.filter(value="asc") }}
                 <button type=submit name="asc" class="btn btn-sm btn-secondary buy_button" value="asc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price <i class="fas fa-arrow-up fa-xs"></i></button>
             </form>
         </div>
         <div class="col-5 col-md mb-2">
             <form method="POST" action="">
-                {{ form.hidden_tag() }}
+                {{ filterform.csrf_token() }}
+                {{ filterform.filter(value="desc") }}
                 <button type=submit name="desc" class="btn btn-sm btn-secondary buy_button" value="desc"><i class="fas fa-funnel-dollar fa-xs"></i> Order by Price <i class="fas fa-arrow-down fa-xs"></i></button>
             </form>
         </div>
@@ -63,6 +67,22 @@
 </div>
 <div class="row">
     <div class="col-12 col-md-12">
+
+        {% if filter_str %}
+        <!--Pagination-->
+        {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        {% if products.page == page_num %}
+        <a class="btn btn-secondary mb-4" href="{{ url_for('shop', page=page_num, filter_str=filter_str)}}">{{ page_num }}</a>
+        {% else %}
+        <a class="btn btn-outline-secondary mb-4 ml-1 mr-1" href="{{ url_for('shop', page=page_num, filter_str=filter_str)}}">{{ page_num }}</a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %}
+        <!------->
+        {% else %}
         <!--Pagination-->
         {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
@@ -75,6 +95,10 @@
         ...
         {% endif %}
         {% endfor %}
+        <!------->
+        {% endif %}
+
+
     </div>
 </div>
 

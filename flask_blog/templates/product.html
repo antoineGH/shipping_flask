@@ -116,7 +116,8 @@
                                     <form method="POST" action="">
                                         {{ form_delete.csrf_token() }}
                                         {{ form_delete.product_delete_id(value=elem.product_id) }}
-                                        {{ form_delete.delete(class="btn btn-danger") }}
+                                        <!--{{ form_delete.delete(class="btn btn-danger") }}-->
+                                        <button type=submit name="delete" value="delete" class="btn btn-sm btn-danger buy_button fa-xs"><i class="fas fa-times"></i></button>
                                     </form>
                                 </td>
                             </tr>

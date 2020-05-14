@@ -19,7 +19,7 @@ body {
 }
 
 .img_cart {
-    width: 30%;
+    width: 40%;
 }
 
 .form-control-lg {
@@ -36,6 +36,21 @@ body {
     height: calc(2.075rem + 2px);
     width: 50%;
     margin-left: 40%;
+}
+
+@media (max-width:500px) {
+
+    .form-control-quantity-cart {
+        height: calc(2.3rem + 2px);
+        display:none;
+    }
+}
+
+
+
+.form-control-quantity-cart {
+    height: calc(2.3rem + 2px);
+    margin-left: 20%;
 }
 
 .form-control-choice {
@@ -142,6 +157,10 @@ delete-shipper span {
         width: 45%;
         margin-bottom: 1px;
         margin-top:10px
+    }
+
+    .form-cart-mobile{
+        display:none;
     }
 }
 
