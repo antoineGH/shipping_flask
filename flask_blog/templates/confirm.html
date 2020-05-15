@@ -1,8 +1,59 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="row mb-3">
+<div class="row mb-3 justify-content-center">
     {% if order_user %}
-    {% for order in order_user %}
+    <div class="col-10 col-md-6 mb-4">
+        <p class="display-5 ">Last Invoice</p>
+        <div class="card">
+            <div class="card-header">
+                <p>Invoice {{ order_user[0].order_number }}</p>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Order Number: {{ order_user[0].order_number }}</h5>
+                <p class="card-text text-center"><span> {{ order_user[0].date_order }}</span></p>
+                <p class="card-text text-left font-weight-bold">Transporter :</p>
+                <p class="card-text text-left"><span>{{ order_user[0].shipper.company_name }}</span> (<a href="tel:{{ order_user[0].shipper.phone}}">Contact: {{ order_user[0].shipper.phone}}</a>)</p>
+                <br />
+                <p class="card-text text-left font-weight-bold">Bill To: </p>
+                <p class="card-text text-left"><span>{{ order_user[0].user.first_name }} {{ order_user[0].user.last_name }}</span></p>
+                <p class="card-text text-left"><span>{{ order_user[0].user.phone }}</span></p>
+                <p class="card-text text-left"><span>{{ order_user[0].user.email }}</span></p>
+                <p class="card-text text-left"><span>{{ order_user[0].user.address }}, {{ order_user[0].user.city }}, {{ order_user[0].user.postcode }}, {{ order_user[0].user.state }}. {{ order_user[0].user.country }}</span></p>
+                <br />
+                <p class="card-text text-left font-weight-bold">Order Details :</p>
+                {% for order_detail in order_details[order_user[0].order_id] %}
+                <div class="row">
+                    <div class="col-3">
+                        <p class="card-text text-left">{{ order_detail.product.product_name }}</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="card-text text-center">{{ order_detail.price }}$</p>
+                    </div>
+                    <div class="col-2">
+                        <p class="card-text text-center">x{{ order_detail.quantity }}</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="card-text text-center">{{ order_detail.total}}$</p>
+                    </div>
+                </div>
+                <hr />
+                <br />
+                {% endfor %}
+                <form method="POST" action="">
+                    {{ form.csrf_token() }}
+                    <p class="text-left font-weight-bold">Total: <span class="price_tag">{{ order_total[order_user[0].order_id] }}$</span></p>
+                    {{ form.order_number(value=order_user[0].order_number) }}
+                    <button type=submit class="btn btn-md btn-primary buy_button"><i class="fas fa-file-pdf fa-lg"></i> Download Invoice</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12 col-md-12 mb-4">
+        <p class="display-5 ">Older Invoices</p>
+    </div>
+    {% for order in order_user[1:] %}
     <div class="col-10 col-md-6 mb-4">
         <div class="card">
             <div class="card-header">
@@ -42,13 +93,10 @@
                 <form method="POST" action="">
                     {{ form.csrf_token() }}
                     <p class="text-left font-weight-bold">Total: <span class="price_tag">{{ order_total[order.order_id] }}$</span></p>
-
                     {{ form.order_number(value=order.order_number) }}
-
                     <button type=submit class="btn btn-md btn-primary buy_button"><i class="fas fa-file-pdf fa-lg"></i> Download Invoice</button>
                 </form>
             </div>
-            
         </div>
     </div>
     {% endfor %}

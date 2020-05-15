@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, make_response, abort
+from flask import render_template, url_for, flash, redirect, request, make_response, abort, Markup
 import pdfkit
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import ShippingForm, ShipperForm, DeleteShipperForm, CategoryForm, DeleteCategoryForm, ProductForm, DeleteProductForm, RegistrationForm, LoginForm, UpdateAccountForm, DeleteAccountForm, AddOrderForm, CreateOrderForm, GenInvoiceForm, FilterForm, DeleteOrderForm, UpdateOrderForm
@@ -122,7 +122,7 @@ def register():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data, password=hashed_password, address=form.address.data, city=form.city.data, state=form.state.data, postcode=form.postcode.data, country=form.country.data, phone=form.phone.data)
         db.session.add(user)
         db.session.commit()
-        flash('You account has been created! You are now able to log in', 'success')
+        flash('Your account has been created! You are now able to Login', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', title='Register', form=form)
@@ -179,11 +179,12 @@ def shop():
     filter_str = request.args.get('filter_str', None, type=str)
     form = AddOrderForm()
     filterform = FilterForm()
-    
-    if request.method == 'GET':
-        form.quantity.data = 1    
 
+    if request.method == 'GET':
+        form.quantity.data = 1
+    
     if current_user.is_authenticated:
+
         if filterform.filter.data == 'asc' :
             print('asc form')
             products = Products.query.order_by(Products.unit_price.asc()).paginate(per_page=8, page=page)
@@ -242,7 +243,7 @@ def shop():
 
             db.session.add(orderdetails)
             db.session.commit()
-            flash('You\'ve just added {} to your cart'.format(product.product_name), 'success')
+            flash(Markup('You\'ve just added {} to your <a href="/cart">Cart</a>'.format(product.product_name)), 'success')
             return redirect(url_for('shop'))
     
     elif form.validate_on_submit() or filterform.validate_on_submit():
@@ -270,7 +271,6 @@ def cart():
 
             for order_detail in order_details:
                 order_detail.order_id = order.order_id
-                order_detail.quantity = form_update.quantity.data
                 order_detail.user_id = 9999
             db.session.commit()
             return redirect(url_for('confirm'))
@@ -330,7 +330,7 @@ def logout():
 @app.route('/confirm', methods=['GET','POST'])
 @login_required
 def confirm():
-    order_user = Orders.query.filter_by(user_id=current_user.user_id).all()
+    order_user = Orders.query.filter_by(user_id=current_user.user_id).order_by(Orders.date_order.desc()).all()
     form = GenInvoiceForm()
 
     order_total = {}
