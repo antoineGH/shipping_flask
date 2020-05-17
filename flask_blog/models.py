@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask_blog import db, login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask_blog import db, login_manager, app
 from flask_login import UserMixin
 from sqlalchemy import update
 from sqlalchemy.sql import func
@@ -48,6 +49,9 @@ class User(db.Model, UserMixin):
     def get_id(self):
            return (self.user_id)
 
+    def get_role(self):
+        return self.role
+
     def set_admin(self):
         user = User.query.filter_by(user_id=self.user_id).first()
         user.role = 1
@@ -58,14 +62,24 @@ class User(db.Model, UserMixin):
         user.role = 0
         db.session.commit()
 
-    def get_role(self):
-        return self.role
-
     def is_admin(self):
         return True if self.role == 1 else False
 
     def is_user(self):
         return True if self.role == 0 else False
+
+    def get_reset_token(self, expires_seconds=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_seconds)
+        return s.dumps({'user_id': self.user_id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('user_id(PK): {self.user_id}, first_name: {self.first_name}, last_name: {self.last_name}, phone: {self.phone}, email: {self.email}, image: {self.image_file}')"

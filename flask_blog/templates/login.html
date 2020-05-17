@@ -44,7 +44,11 @@
                             {{ form.remember(class="form-check-input") }}
                             {{ form.remember.label(class="form-check-label") }}
                         </div>
-</fieldset>
+
+                </fieldset>
+                <small class="text-muted ml-1">
+                    <a href="{{ url_for('reset_request') }}">Forgot Password?</a>
+                </small>
             </form>
         </div>
         <div class="border-top pt-3">
