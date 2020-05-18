@@ -2,6 +2,35 @@ body {
   background: #fafafa;
   color: #333333;
 }
+
+/*Sticky*/
+.content-section {
+    min-height: 2000px;
+}
+
+.sidebar-section {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+
+.sidebar-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.make-me-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding: 20px 15px;
+}
+
 .dot {
     height: 25px;
     width: 25px;
