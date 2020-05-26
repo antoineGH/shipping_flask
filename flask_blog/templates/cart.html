@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     {% else %}
-                    <p>Oh no, your cart is empy, go to <a href="{{url_for('shop')}}">Shop</a>.</p>
+                    <p>Oh no, your cart is empy, go to <a href="{{url_for('shops.shop')}}">Shop</a>.</p>
                     {% endif %}
                     <tbody>
                         {% for order in order_details %}

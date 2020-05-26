@@ -20,40 +20,40 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="{{url_for('shop')}}"><img class="navbar-logo" src="{{ url_for('static', filename='amazon_white.png')}}" alt="logo_main"></a>
+            <a class="navbar-brand" href="{{url_for('shops.shop')}}"><img class="navbar-logo" src="{{ url_for('static', filename='amazon_white.png')}}" alt="logo_main"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{{url_for('shop')}}"><i class="fas fa-truck fa-sm"></i> Shop</a>
-                    <a class="nav-item nav-link ml-2" href="{{url_for('shipping')}}"><i class="fas fa-shopping-bag fa-sm"></i> Shipping</a>
+                    <a class="nav-item nav-link" href="{{url_for('shops.shop')}}"><i class="fas fa-truck fa-sm"></i> Shop</a>
+                    <a class="nav-item nav-link ml-2" href="{{url_for('shippings.shipping')}}"><i class="fas fa-shopping-bag fa-sm"></i> Shipping</a>
                     {% if current_user.is_authenticated and current_user.role == 1 %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-tasks ml-2"></i> Manage
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{url_for('shippers')}}"><i class="fas fa-plane-departure fa-sm mr-1"></i> Shippers</a>
+                            <a class="dropdown-item" href="{{url_for('shipper.shippers')}}"><i class="fas fa-plane-departure fa-sm mr-1"></i> Shippers</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{url_for('category')}}"><i class="fas fa-columns fa-sm mr-1"></i> Categories</a>
+                            <a class="dropdown-item" href="{{url_for('categories.category')}}"><i class="fas fa-columns fa-sm mr-1"></i> Categories</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{url_for('product')}}"><i class="fas fa-cube fa-sm mr-1"></i> Products</a>
+                            <a class="dropdown-item" href="{{url_for('products.product')}}"><i class="fas fa-cube fa-sm mr-1"></i> Products</a>
                         </div>
                         {% endif %}
                 </div>
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
                     {% if g_total_item %}
-                        <a class="nav-item nav-link" href="{{url_for('cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart <span class=" ml-1 dot text-white text-center">{{g_total_item}}</span></a>
+                        <a class="nav-item nav-link" href="{{url_for('shops.cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart <span class=" ml-1 dot text-white text-center">{{g_total_item}}</span></a>
                     {% else %}
-                        <a class="nav-item nav-link" href="{{url_for('cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart </a>
+                        <a class="nav-item nav-link" href="{{url_for('shops.cart')}}"><i class="fas fa-shopping-cart fa-sm"></i> Cart </a>
                     {% endif %}
-                    <span class="reminder mt-2"></span><a class="nav-item nav-link" href="{{ url_for('account') }}"><i class="fas fa-user-cog fa-sm"></i> {{ current_user.email }}</a>
-                    <a class="nav-item nav-link" href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt fa-sm"></i> Logout</a>
+                    <span class="reminder mt-2"></span><a class="nav-item nav-link" href="{{ url_for('users.account') }}"><i class="fas fa-user-cog fa-sm"></i> {{ current_user.email }}</a>
+                    <a class="nav-item nav-link" href="{{url_for('users.logout')}}"><i class="fas fa-sign-out-alt fa-sm"></i> Logout</a>
                     {% else %}
-                    <a class="nav-item nav-link" href="{{url_for('login')}}"><i class="fas fa-sign-in-alt fa-sm"></i> Login</a>
-                    <a class="nav-item nav-link ml-2" href="{{url_for('register')}}"><i class="fas fa-user-plus fa-sm"></i> Register</a>
+                    <a class="nav-item nav-link" href="{{url_for('users.login')}}"><i class="fas fa-sign-in-alt fa-sm"></i> Login</a>
+                    <a class="nav-item nav-link ml-2" href="{{url_for('users.register')}}"><i class="fas fa-user-plus fa-sm"></i> Register</a>
                     {% endif %}
                 </div>
             </div>

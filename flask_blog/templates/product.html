@@ -129,9 +129,9 @@
                     {% for page_num in product.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if product.page == page_num %}
-                    <a class="btn btn-secondary mb-4" href="{{ url_for('product', page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-secondary mb-4" href="{{ url_for('products.product', page=page_num)}}">{{ page_num }}</a>
                     {% else %}
-                    <a class="btn btn-outline-secondary mb-4 ml-1 mr-1" href="{{ url_for('product', page=page_num)}}">{{ page_num }}</a>
+                    <a class="btn btn-outline-secondary mb-4 ml-1 mr-1" href="{{ url_for('products.product', page=page_num)}}">{{ page_num }}</a>
                     {% endif %}
                     {% else %}
                     ...

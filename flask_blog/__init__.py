@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 app.config['MAIL_SERVER'] = 'smtp.mail.com'
 app.config['MAIL_PORT'] = 587
@@ -20,4 +20,16 @@ app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 mail = Mail(app)
 
-from flask_blog import routes
+from flask_blog.users.routes import users
+from flask_blog.categories.routes import categories
+from flask_blog.products.routes import products
+from flask_blog.shipper.routes import shipper
+from flask_blog.shippings.routes import shippings
+from flask_blog.shops.routes import shops
+
+app.register_blueprint(users)
+app.register_blueprint(categories)
+app.register_blueprint(products)
+app.register_blueprint(shipper)
+app.register_blueprint(shippings)
+app.register_blueprint(shops)
