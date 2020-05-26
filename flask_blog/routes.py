@@ -113,6 +113,21 @@ def product():
     
         return render_template('product.html', title='Products', form=form, product=product, form_delete=form_delete, category=category)
 
+def send_welcome_email(user):
+    msg = Message('Thanks for signing up!', sender='templars69@mail.com', recipients=[user.email])
+    msg.body = f'''Hi {user.first_name.title()} {user.last_name.title()}, 
+
+Thanks for registering with us! Here's your login information: 
+
+Username : {user.email}
+
+Kind regards,
+
+Templars69
+
+    '''
+    mail.send(msg)
+
 @app.route('/register', methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
@@ -123,6 +138,7 @@ def register():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data, password=hashed_password, address=form.address.data, city=form.city.data, state=form.state.data, postcode=form.postcode.data, country=form.country.data, phone=form.phone.data)
         db.session.add(user)
         db.session.commit()
+        send_welcome_email(user)
         flash('Your account has been created! You are now able to Login', 'success')
         return redirect(url_for('login'))
 
