@@ -110,20 +110,20 @@ $ exit()
 
 ### Main Page
 
-![Login Screenshot](https://github.com/antoineratat/ShortURL/blob/master/screenshots/s1.PNG?raw=true)
+![Login Screenshot](https://github.com/antoineratat/shipping_flask/blob/master/screenshots/1.PNG?raw=true)
 
 ### Product Management
 
-![Login Screenshot](https://github.com/antoineratat/ShortURL/blob/master/screenshots/s1.PNG?raw=true)
+![Login Screenshot](https://github.com/antoineratat/shipping_flask/blob/master/screenshots/2.PNG?raw=true)
 
 ### Cart Management
 
-![Login Screenshot](https://github.com/antoineratat/ShortURL/blob/master/screenshots/s1.PNG?raw=true)
+![Login Screenshot](https://github.com/antoineratat/shipping_flask/blob/master/screenshots/7.PNG?raw=true)
 
 ### User Management
 
-![Login Screenshot](https://github.com/antoineratat/ShortURL/blob/master/screenshots/s1.PNG?raw=true)
+![Login Screenshot](https://github.com/antoineratat/shipping_flask/blob/master/screenshots/8.PNG?raw=true)
 
 ### Invoice Management
 
-![Login Screenshot](https://github.com/antoineratat/ShortURL/blob/master/screenshots/s1.PNG?raw=true)
+![Login Screenshot](https://github.com/antoineratat/shipping_flask/blob/master/screenshots/9.PNG?raw=true)
