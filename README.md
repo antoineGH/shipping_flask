@@ -91,8 +91,6 @@ $ python .\run.py
 
 ### Initialize Database
 
-site.db SQliteCan be connected to other DB in [config.py](config.py) with **SQLALCHEMY_DATABASE_URI**
-
 ```
 $ venv\Script\Activate
 $ python
