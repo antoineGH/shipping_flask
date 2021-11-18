@@ -106,20 +106,20 @@ $ exit()
 
 ### Main Page
 
-![Login Screenshot](https://templars.guru/app/github/shipping_flask/1.PNG)
+![Login Screenshot](https://github.com/antoineratat/github_docs/blob/main/shipping_flask/1.PNG?raw=true)
 
 ### Product Management
 
-![Login Screenshot](https://templars.guru/app/github/shipping_flask/2.PNG)
+![Login Screenshot](https://github.com/antoineratat/github_docs/blob/main/shipping_flask/2.PNG?raw=true)
 
 ### Cart Management
 
-![Login Screenshot](https://templars.guru/app/github/shipping_flask/7.PNG)
+![Login Screenshot](https://github.com/antoineratat/github_docs/blob/main/shipping_flask/7.PNG?raw=true)
 
 ### User Management
 
-![Login Screenshot](https://templars.guru/app/github/shipping_flask/8.PNG)
+![Login Screenshot](https://github.com/antoineratat/github_docs/blob/main/shipping_flask/8.PNG?raw=true)
 
 ### Invoice Management
 
-![Login Screenshot](https://templars.guru/app/github/shipping_flask/9.PNG)
+![Login Screenshot](https://github.com/antoineratat/github_docs/blob/main/shipping_flask/9.PNG?raw=true)
